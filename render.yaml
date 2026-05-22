@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: newton-agent
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DEEPSEEK_BASE_URL
+        value: https://api.deepseek.com/v1
+      - key: DEEPSEEK_API_KEY
+        sync: false

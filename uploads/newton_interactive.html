@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newton's First Law · Virtual Simulation Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0e1a;
+            --bg-card: #131829;
+            --accent: #00d4ff;
+            --accent-glow: rgba(0,212,255,0.15);
+            --warm: #ff6b35;
+            --success: #00e676;
+            --text: #e8ecf4;
+            --text-dim: #8892a8;
+            --text-muted: #5a6478;
+            --border: rgba(255,255,255,0.06);
+            --radius: 14px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Inter',sans-serif;
+            background:var(--bg-deep);
+            color:var(--text);
+            min-height:100vh;
+        }
+        .header {
+            padding:24px 40px 18px;
+            display:flex; align-items:center; gap:20px;
+            border-bottom:1px solid var(--border);
+            background:linear-gradient(180deg,rgba(0,212,255,0.04) 0%,transparent 100%);
+        }
+        .header-icon {
+            width:48px;height:48px;border-radius:12px;
+            background:linear-gradient(135deg,var(--accent),#0066ff);
+            display:flex;align-items:center;justify-content:center;
+            font-size:24px;box-shadow:0 4px 20px rgba(0,212,255,0.3);
+        }
+        .header h1 { font-size:22px;font-weight:700; }
+        .header h1 span { color:var(--accent); }
+        .header-sub { font-size:12px;color:var(--text-dim);margin-top:2px; }
+        .header-title { flex:1; }
+
+        .export-area {
+            display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+        }
+        .log-counter {
+            font-size:12px; color:var(--text-dim);
+            padding:6px 12px; border-radius:8px;
+            background:rgba(255,255,255,0.04);
+            border:1px solid var(--border);
+        }
+        .log-counter b { color:var(--accent); font-weight:700; }
+        .btn-export {
+            padding:9px 18px; border:none; border-radius:10px;
+            background:linear-gradient(135deg,var(--success),#00a657);
+            color:#0a0e1a; font-family:inherit; font-size:13px; font-weight:600;
+            cursor:pointer; transition:all .25s;
+            box-shadow:0 2px 10px rgba(0,230,118,0.25);
+        }
+        .btn-export:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,230,118,0.4); }
+        .btn-export:disabled {
+            background:rgba(255,255,255,0.06); color:var(--text-muted);
+            cursor:not-allowed; box-shadow:none; transform:none;
+        }
+        .btn-clear-log {
+            padding:9px 14px; border:1px solid var(--border); border-radius:10px;
+            background:transparent; color:var(--text-dim);
+            font-family:inherit; font-size:12px; cursor:pointer; transition:all .2s;
+        }
+        .btn-clear-log:hover:not(:disabled) {
+            color:var(--warm); border-color:rgba(255,107,53,0.3);
+        }
+        .btn-clear-log:disabled { opacity:0.4; cursor:not-allowed; }
+        @media (max-width:900px) {
+            .header { flex-wrap:wrap; }
+            .export-area { width:100%; justify-content:flex-end; margin-top:8px; }
+        }
+
+        .tab-nav {
+            display:flex;gap:4px;padding:14px 40px 0;
+            border-bottom:1px solid var(--border);
+        }
+        .tab-btn {
+            padding:10px 24px;background:transparent;border:none;
+            color:var(--text-dim);font-family:inherit;font-size:13px;
+            font-weight:500;cursor:pointer;border-bottom:2px solid transparent;
+            transition:all .3s;position:relative;top:1px;
+        }
+        .tab-btn:hover { color:var(--text); }
+        .tab-btn.active {
+            color:var(--accent);border-bottom-color:var(--accent);
+            background:var(--accent-glow);border-radius:8px 8px 0 0;
+        }
+        .tab-num {
+            display:inline-block;width:20px;height:20px;line-height:20px;
+            text-align:center;border-radius:5px;background:rgba(255,255,255,0.08);
+            font-size:11px;margin-right:6px;font-weight:700;
+        }
+        .tab-btn.active .tab-num { background:var(--accent);color:var(--bg-deep); }
+        .thought-badge {
+            display:inline-block;padding:2px 8px;border-radius:20px;
+            background:rgba(255,107,53,0.15);color:var(--warm);
+            font-size:10px;font-weight:600;letter-spacing:1px;margin-left:6px;
+        }
+
+        .experiment-panel { display:none;padding:20px 40px 40px; }
+        .experiment-panel.active { display:block; }
+
+        .exp-layout {
+            display:grid;grid-template-columns:300px 1fr;
+            gap:16px;max-width:1300px;
+        }
+        .sidebar { display:flex;flex-direction:column;gap:14px; }
+        .card {
+            background:var(--bg-card);border:1px solid var(--border);
+            border-radius:var(--radius);padding:18px;
+        }
+        .card-title {
+            font-size:12px;font-weight:600;color:var(--text-dim);
+            text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;
+        }
+        .param-row {
+            display:flex;justify-content:space-between;
+            align-items:center;margin-bottom:6px;
+        }
+        .param-label { font-size:13px; }
+        .param-val { font-size:13px;font-weight:700;color:var(--accent); }
+
+        input[type="range"] {
+            -webkit-appearance:none;width:100%;height:5px;
+            border-radius:3px;background:rgba(255,255,255,0.08);
+            outline:none;margin-bottom:14px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+            background:var(--accent);cursor:pointer;
+            box-shadow:0 0 8px rgba(0,212,255,0.4);border:2px solid var(--bg-deep);
+        }
+        select {
+            width:100%;padding:8px 12px;background:rgba(255,255,255,0.06);
+            border:1px solid var(--border);border-radius:8px;
+            color:var(--text);font-family:inherit;font-size:13px;
+            cursor:pointer;margin-bottom:10px;
+        }
+        select option { background:var(--bg-card); }
+
+        .btn-group { display:flex;gap:8px;flex-wrap:wrap; }
+        .btn {
+            flex:1;padding:10px 10px;border:none;border-radius:10px;
+            font-family:inherit;font-size:13px;font-weight:600;
+            cursor:pointer;transition:all .25s;min-width:70px;
+        }
+        .btn-primary { background:linear-gradient(135deg,var(--accent),#0088cc);color:var(--bg-deep); }
+        .btn-primary:hover { transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,212,255,0.4); }
+        .btn-warn { background:rgba(255,107,53,0.15);color:var(--warm);border:1px solid rgba(255,107,53,0.3); }
+        .btn-warn:hover { background:rgba(255,107,53,0.25); }
+
+        .canvas-wrap {
+            background:var(--bg-card);border:1px solid var(--border);
+            border-radius:var(--radius);overflow:hidden;position:relative;
+        }
+        .canvas-wrap canvas { display:block;width:100%;cursor:default; }
+
+        /* viewport slider below canvas */
+        .viewport-bar {
+            display:none;
+            padding:8px 16px;
+            background:rgba(0,0,0,0.3);
+            border-top:1px solid var(--border);
+            align-items:center;gap:12px;
+        }
+        .viewport-bar.show { display:flex; }
+        .viewport-bar label {
+            font-size:11px;color:var(--text-dim);white-space:nowrap;
+            letter-spacing:1px;
+        }
+        .viewport-bar input[type="range"] {
+            margin:0;flex:1;height:6px;
+        }
+        .viewport-bar .vp-val {
+            font-size:11px;color:var(--accent);font-weight:700;
+            min-width:60px;text-align:right;
+        }
+        .viewport-bar .vp-mode-btns {
+            display:flex;gap:4px;
+        }
+        .viewport-bar .vp-mode-btn {
+            padding:4px 10px;border:1px solid var(--border);border-radius:6px;
+            background:transparent;color:var(--text-dim);font-size:11px;
+            font-family:inherit;cursor:pointer;transition:all .2s;
+        }
+        .viewport-bar .vp-mode-btn:hover,
+        .viewport-bar .vp-mode-btn.active {
+            background:var(--accent-glow);color:var(--accent);
+            border-color:rgba(0,212,255,0.3);
+        }
+
+        .info-box {
+            background:rgba(0,212,255,0.06);
+            border-left:3px solid var(--accent);
+            border-radius:0 10px 10px 0;
+            padding:12px 16px;font-size:12px;line-height:1.8;
+            color:var(--text-dim);
+        }
+        .info-box strong { color:var(--accent);font-weight:600; }
+        .info-box em { color:var(--warm);font-style:normal;font-weight:600; }
+
+        .stats-bar { display:flex;gap:10px;margin-top:14px;flex-wrap:wrap; }
+        .stat-chip {
+            flex:1;min-width:110px;background:var(--bg-card);
+            border:1px solid var(--border);border-radius:10px;
+            padding:10px 14px;text-align:center;
+        }
+        .stat-chip .label { font-size:10px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px; }
+        .stat-chip .value { font-size:18px;font-weight:700;color:var(--accent); }
+        .stat-chip .value.warm { color:var(--warm); }
+        .stat-chip .value.green { color:var(--success); }
+
+        .friction-legend { display:flex;gap:10px;margin:8px 0;flex-wrap:wrap; }
+        .legend-item { display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim); }
+        .legend-color { width:20px;height:6px;border-radius:3px; }
+
+        .timeline { margin-top:16px; }
+        .timeline-item {
+            display:flex;gap:14px;padding:10px 0;
+            border-bottom:1px solid var(--border);font-size:13px;
+            align-items:flex-start;
+        }
+        .timeline-item:last-child { border-bottom:none; }
+        .tl-dot { width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0; }
+        .tl-dot.aristotle { background:#ff4444; }
+        .tl-dot.galileo { background:#ffaa00; }
+        .tl-dot.newton { background:var(--success); }
+        .tl-name { font-weight:600;color:var(--text);min-width:80px; }
+        .tl-desc { color:var(--text-dim); }
+
+        @media (max-width:900px) {
+            .exp-layout { grid-template-columns:1fr; }
+            .header,.tab-nav,.experiment-panel { padding-left:16px;padding-right:16px; }
+        }
+
+        /* Charts */
+        .charts-wrap {
+            display:none;
+            grid-template-columns:1fr;
+            gap:14px;
+            margin-top:14px;
+            max-width:1300px;
+        }
+        .charts-wrap.show { display:grid; }
+        .chart-card {
+            background:var(--bg-card);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            padding:16px;
+        }
+        .chart-card .chart-title {
+            font-size:12px;font-weight:600;color:var(--text-dim);
+            text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;
+        }
+        .chart-card canvas { width:100%;height:220px;display:block; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-icon">⚡</div>
+    <div class="header-title">
+        <h1>Newton's First Law · <span>Virtual Simulation Lab</span></h1>
+        <div class="header-sub">Grade 8 Physics · Chapter 5, Section 5 · Exploring the Relationship Between Motion and Force</div>
+    </div>
+    <div class="export-area">
+        <span class="log-counter">📋 <b id="log-count">0</b> runs recorded</span>
+        <button class="btn-export" id="btn-export" onclick="exportLog()" disabled>⬇ Export Records</button>
+        <button class="btn-clear-log" id="btn-clear-log" onclick="clearLog()" disabled>Clear</button>
+    </div>
+</div>
+
+<div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Galileo's Inclined Plane</button>
+    <button class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Thought Experiment</button>
+    <button class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Air Track Experiment</button>
+</div>
+
+<!-- ========== EXP 1 ========== -->
+<div class="experiment-panel active" id="panel-0">
+<div class="exp-layout">
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-title">Experiment Controls</div>
+            <div class="param-row"><span class="param-label">Surface Roughness</span></div>
+            <select id="exp1-surface">
+                <option value="0">Compare All (3 Surfaces)</option>
+                <option value="1">Towel (Rough)</option>
+                <option value="2">Cotton (Medium)</option>
+                <option value="3">Wood (Smooth)</option>
+            </select>
+            <div class="param-row"><span class="param-label">Ramp Height</span><span class="param-val" id="exp1-height-val">80 px</span></div>
+            <input type="range" id="exp1-height" min="40" max="140" value="80">
+            <div class="param-row"><span class="param-label">Ball Mass</span><span class="param-val" id="exp1-mass-val">1.0 kg</span></div>
+            <input type="range" id="exp1-mass" min="0.5" max="3.0" step="0.1" value="1.0">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="exp1Start()">▶ Release Ball</button>
+                <button class="btn btn-warn" onclick="exp1Reset()">↺ Reset</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Experiment Data</div>
+            <div class="friction-legend">
+                <div class="legend-item"><div class="legend-color" style="background:#ff6b6b"></div>Towel (Rough)</div>
+                <div class="legend-item"><div class="legend-color" style="background:#ffd93d"></div>Cotton (Medium)</div>
+                <div class="legend-item"><div class="legend-color" style="background:#6bcb77"></div>Wood (Smooth)</div>
+            </div>
+            <div id="exp1-data" style="font-size:12px;line-height:1.9;color:var(--text-dim)">Click "Release Ball" to start</div>
+        </div>
+        <div class="info-box">
+            <strong>Purpose:</strong> Investigate how surface roughness affects the distance an object travels.<br>
+            <strong>Key Inference:</strong> The smoother the surface, the farther the ball travels. If resistance were zero and the net force were zero, the ball would keep moving uniformly.
+        </div>
+    </div>
+    <div>
+        <div class="canvas-wrap">
+            <canvas id="canvas1" height="400"></canvas>
+            <div class="viewport-bar" id="vp1">
+                <label>🔍 View</label>
+                <div class="vp-mode-btns">
+                    <button class="vp-mode-btn" onclick="vpGo(1,0)">⟵ Start</button>
+                    <button class="vp-mode-btn" onclick="vpGo(1,1)">End ⟶</button>
+                </div>
+                <input type="range" id="vp1-slider" min="0" max="100" value="0" oninput="vpSlide(1)">
+                <span class="vp-val" id="vp1-val"></span>
+            </div>
+        </div>
+        <div class="stats-bar" id="exp1-stats"></div>
+    </div>
+</div>
+<div class="charts-wrap" id="charts1">
+    <div class="chart-card"><div class="chart-title">Velocity-Time Graph</div><canvas id="chart1-vt"></canvas></div>
+    
+</div>
+</div>
+
+<!-- ========== EXP 2 ========== -->
+<div class="experiment-panel" id="panel-1">
+<div class="exp-layout">
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-title">Experiment Controls</div>
+            <div class="param-row"><span class="param-label">Right Ramp Angle</span><span class="param-val" id="exp2-angle-val">30°</span></div>
+            <input type="range" id="exp2-angle" min="0" max="45" value="30">
+            <div class="param-row"><span class="param-label">Release Height</span><span class="param-val" id="exp2-release-val">120 px</span></div>
+            <input type="range" id="exp2-release" min="60" max="160" value="120">
+            <div class="param-row"><span class="param-label">Friction</span><span class="param-val" id="exp2-friction-val">0.02</span></div>
+            <input type="range" id="exp2-friction" min="0" max="0.10" step="0.01" value="0.02">
+            <div class="param-row"><span class="param-label">Max Duration</span><span class="param-val" id="exp2-duration-val">15 s</span></div>
+            <input type="range" id="exp2-duration" min="5" max="60" step="1" value="15">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="exp2Start()">▶ Release Ball</button>
+                <button class="btn btn-warn" onclick="exp2Reset()">↺ Reset</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Experiment Records</div>
+            <div id="exp2-data" style="font-size:12px;line-height:1.9;color:var(--text-dim)">Adjust parameters and release the ball</div>
+        </div>
+        <div class="info-box">
+            <strong>Galileo's Reasoning:</strong> A ball released from the left rises on the right to <em>nearly its original height</em>.<br>
+            The <em>smaller the right angle</em>, the farther it travels. If the right plane becomes horizontal and resistance is ignored, the ball would continue moving uniformly.
+        </div>
+    </div>
+    <div>
+        <div class="canvas-wrap">
+            <canvas id="canvas2" height="400"></canvas>
+            <div class="viewport-bar" id="vp2">
+                <label>🔍 View</label>
+                <div class="vp-mode-btns">
+                    <button class="vp-mode-btn" onclick="vpGo(2,0)">⟵ Start</button>
+                    <button class="vp-mode-btn" onclick="vpGo(2,1)">End ⟶</button>
+                </div>
+                <input type="range" id="vp2-slider" min="0" max="100" value="0" oninput="vpSlide(2)">
+                <span class="vp-val" id="vp2-val"></span>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-chip"><div class="label">Release Height</div><div class="value" id="exp2-stat-h0">—</div></div>
+            <div class="stat-chip"><div class="label">Final Height</div><div class="value warm" id="exp2-stat-h1">—</div></div>
+            <div class="stat-chip"><div class="label">Distance</div><div class="value green" id="exp2-stat-dist">—</div></div>
+            <div class="stat-chip"><div class="label">Energy Loss</div><div class="value" id="exp2-stat-loss">—</div></div>
+        </div>
+    </div>
+</div>
+<div class="charts-wrap" id="charts2">
+    <div class="chart-card"><div class="chart-title">Velocity-Time Graph</div><canvas id="chart2-vt"></canvas></div>
+    
+</div>
+</div>
+
+<!-- ========== EXP 3 ========== -->
+<div class="experiment-panel" id="panel-2">
+<div class="exp-layout">
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-title">Experiment Controls</div>
+            <div class="param-row"><span class="param-label">Air Track</span></div>
+            <select id="exp3-mode" onchange="exp3UpdateFriction()">
+                <option value="ideal">Ideal (Frictionless)</option>
+                <option value="on">On (Nearly Frictionless)</option>
+                <option value="off">Off (With Friction)</option>
+            </select>
+            <div class="param-row" style="display:none"><span class="param-label">Friction Coefficient μ</span><span class="param-val" id="exp3-mu-val">0.000</span></div>
+            <div class="param-row"><span class="param-label">Initial Push</span><span class="param-val" id="exp3-push-val">3.0</span></div>
+            <input type="range" id="exp3-push" min="1" max="6" step="0.5" value="3.0">
+            <div class="param-row"><span class="param-label">Max Duration</span><span class="param-val" id="exp3-duration-val">10 s</span></div>
+            <input type="range" id="exp3-duration" min="3" max="30" step="1" value="10">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="exp3Start()">▶ Push Slider</button>
+                <button class="btn btn-warn" onclick="exp3Reset()">↺ Reset</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Equal-Interval Positions</div>
+            <div id="exp3-data" style="font-size:12px;line-height:1.9;color:var(--text-dim)">Push the slider to observe data</div>
+        </div>
+        <div class="info-box">
+            <strong>Air Track:</strong> In the ideal state, friction is zero; when the air is on, airflow makes the slider <em>levitate</em>, nearly eliminating friction.<br>
+            When on, distance covered in equal time intervals is <em>nearly equal</em> → <em>uniform straight-line motion</em>.<br>
+            Compare with the deceleration when off to see that <strong>net force is the cause of changes in motion</strong>.
+        </div>
+    </div>
+    <div>
+        <div class="canvas-wrap">
+            <canvas id="canvas3" height="400"></canvas>
+            <div class="viewport-bar" id="vp3">
+                <label>🔍 View</label>
+                <div class="vp-mode-btns">
+                    <button class="vp-mode-btn" onclick="vpGo(3,0)">⟵ Start</button>
+                    <button class="vp-mode-btn" onclick="vpGo(3,1)">End ⟶</button>
+                </div>
+                <input type="range" id="vp3-slider" min="0" max="100" value="0" oninput="vpSlide(3)">
+                <span class="vp-val" id="vp3-val"></span>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-chip"><div class="label">Current Velocity</div><div class="value" id="exp3-stat-v">—</div></div>
+            <div class="stat-chip"><div class="label">Distance Traveled</div><div class="value warm" id="exp3-stat-d">—</div></div>
+            <div class="stat-chip"><div class="label">Time Elapsed</div><div class="value green" id="exp3-stat-t">—</div></div>
+            <div class="stat-chip"><div class="label">Velocity Change</div><div class="value" id="exp3-stat-a">—</div></div>
+        </div>
+    </div>
+</div>
+<div class="charts-wrap" id="charts3">
+    <div class="chart-card"><div class="chart-title">Velocity-Time Graph</div><canvas id="chart3-vt"></canvas></div>
+    
+</div>
+
+<div class="card" style="margin-top:20px;max-width:1300px;">
+    <div class="card-title">Historical Development · From Aristotle to Newton</div>
+    <div class="timeline">
+        <div class="timeline-item"><div class="tl-dot aristotle"></div><div class="tl-name">Aristotle</div><div class="tl-desc">Force is what keeps objects moving — based on everyday observation (c. 4th century BCE)</div></div>
+        <div class="timeline-item"><div class="tl-dot galileo"></div><div class="tl-name">Galileo</div><div class="tl-desc">Inclined plane experiments + ideal reasoning: if resistance is ignored and net force is zero, an object maintains uniform straight-line motion (c. 1638)</div></div>
+        <div class="timeline-item"><div class="tl-dot newton"></div><div class="tl-name">Newton</div><div class="tl-desc"><strong style="color:var(--accent)">Newton's First Law:</strong> Every object remains at rest or in uniform straight-line motion unless a nonzero net force acts on it (1687)</div></div>
+    </div>
+</div>
+</div>
+
+<script>
+// ======================== CANVAS SIZING ========================
+let canvasSized = [false, false, false];
+
+function sizeCanvas(idx) {
+    const c = document.getElementById('canvas' + (idx + 1));
+    const pw = c.parentElement.clientWidth;
+    if (pw < 10) return;
+    c.width = pw * 2;
+    c.height = 400 * 2;
+    c.style.height = '400px';
+    const ctx = c.getContext('2d');
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    canvasSized[idx] = true;
+}
+
+function ensureCanvas(idx) {
+    if (!canvasSized[idx]) sizeCanvas(idx);
+}
+
+// ======================== OPERATION LOG ========================
+const operationLog = [];
+
+function logRun(experiment, params, results) {
+    operationLog.push({
+        timestamp: new Date(),
+        experiment,
+        params,
+        results
+    });
+    updateLogUI();
+}
+
+function updateLogUI() {
+    const n = operationLog.length;
+    document.getElementById('log-count').textContent = n;
+    document.getElementById('btn-export').disabled = (n === 0);
+    document.getElementById('btn-clear-log').disabled = (n === 0);
+}
+
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function formatTime(d) {
+    return pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
+}
+function formatDate(d) {
+    return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate());
+}
+
+function exportLog() {
+    if (operationLog.length === 0) return;
+    const name = (prompt('Student name (optional):', '') || 'Anonymous').trim() || 'Anonymous';
+    const now = new Date();
+
+    let report = '';
+    report += 'NEWTON\'S FIRST LAW — STUDENT LAB REPORT\n';
+    report += '========================================\n\n';
+    report += 'Student:    ' + name + '\n';
+    report += 'Exported:   ' + formatDate(now) + ' ' + formatTime(now) + '\n';
+    report += 'Total runs: ' + operationLog.length + '\n\n';
+
+    operationLog.forEach((entry, i) => {
+        report += '----------------------------------------\n';
+        report += 'Run #' + (i + 1) + ' — ' + entry.experiment + '\n';
+        report += 'Time: ' + formatTime(entry.timestamp) + '\n\n';
+        report += 'Parameters:\n';
+        Object.entries(entry.params).forEach(([k, v]) => {
+            report += '  • ' + k + ': ' + v + '\n';
+        });
+        report += '\nResults:\n';
+        Object.entries(entry.results).forEach(([k, v]) => {
+            report += '  • ' + k + ': ' + v + '\n';
+        });
+        report += '\n';
+    });
+
+    report += '----------------------------------------\n';
+    report += 'End of report\n';
+
+    const safeName = name.replace(/[^a-zA-Z0-9_-]+/g, '_');
+    const filename = 'newton-lab-' + safeName + '-' + formatDate(now) + '.txt';
+
+    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+function clearLog() {
+    if (operationLog.length === 0) return;
+    if (!confirm('Clear all ' + operationLog.length + ' recorded run(s)? This cannot be undone.')) return;
+    operationLog.length = 0;
+    updateLogUI();
+}
+
+// ======================== TAB SWITCH ========================
+let activeTab = 0;
+function switchTab(idx) {
+    activeTab = idx;
+    document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+    document.querySelectorAll('.experiment-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+    requestAnimationFrame(() => {
+        ensureCanvas(idx);
+        [exp1Draw, exp2Draw, exp3Draw][idx]();
+    });
+}
+
+// ======================== VIEWPORT CONTROL ========================
+const vpState = {
+    1: { scrollPct:0, maxX:0, running:false },
+    2: { scrollPct:0, maxX:0, running:false },
+    3: { scrollPct:0, maxX:0, running:false },
+};
+
+function showVP(n) { document.getElementById('vp'+n).classList.add('show'); }
+function hideVP(n) { document.getElementById('vp'+n).classList.remove('show'); }
+
+function vpGo(n, pct) {
+    vpState[n].scrollPct = pct;
+    document.getElementById('vp'+n+'-slider').value = pct * 100;
+    [null,exp1Draw,exp2Draw,exp3Draw][n]();
+}
+function vpSlide(n) {
+    vpState[n].scrollPct = parseInt(document.getElementById('vp'+n+'-slider').value)/100;
+    [null,exp1Draw,exp2Draw,exp3Draw][n]();
+}
+
+// Returns camX (scroll offset), never scales
+function getView(n, w, worldMaxX, originX) {
+    const vp = vpState[n];
+    if (vp.running) {
+        // Auto-follow during animation
+        if (worldMaxX > originX + w * 0.55) return worldMaxX - originX - w * 0.55;
+        return 0;
+    }
+    // After animation: scroll based on slider
+    const totalSpan = worldMaxX + 80;
+    if (totalSpan <= w) return 0;
+    const maxScroll = totalSpan - w;
+    const camX = vp.scrollPct * maxScroll;
+    document.getElementById('vp'+n+'-val').textContent = Math.round(vp.scrollPct*100)+'%';
+    return camX;
+}
+
+// ======================== DRAWING HELPERS ========================
+function drawGrid(ctx, w, h) {
+    ctx.save();
+    ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
+    for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+    for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+    ctx.restore();
+}
+
+function rrect(ctx,x,y,w,h,r) {
+    ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+}
+
+// ======================== EXPERIMENT 1 ========================
+let exp1 = { running:false, carts:[], done:false };
+const SURFS = [
+    {name:'Towel (Rough)',short:'Towel',mu:0.40,color:'#ff6b6b'},
+    {name:'Cotton (Medium)',short:'Cotton',mu:0.30,color:'#ffd93d'},
+    {name:'Wood (Smooth)',short:'Wood',mu:0.10,color:'#6bcb77'},
+];
+
+function exp1Reset() {
+    exp1={running:false,carts:[],done:false};
+    vpState[1].running=false;vpState[1].maxX=0;hideVP(1);
+    document.getElementById('exp1-data').innerHTML='Click "Release Ball" to start';
+    document.getElementById('exp1-stats').innerHTML='';
+    document.getElementById('charts1').classList.remove('show');
+    exp1Draw();
+}
+function exp1Start() {
+    if(exp1.running) return;
+    const si=parseInt(document.getElementById('exp1-surface').value);
+    const rampH=parseInt(document.getElementById('exp1-height').value);
+    const surfs=si===0?[0,1,2]:[si-1];
+    const rampBaseX=100,rampLen=150,groundY=290;
+    exp1.carts=surfs.map(idx=>{
+        const s=SURFS[idx];
+        return{s,si:idx,x:rampBaseX,y:groundY-rampH,vx:0,vy:0,onRamp:true,groundY,
+            rampTopX:rampBaseX,rampTopY:groundY-rampH,rampBotX:rampBaseX+rampLen,rampBotY:groundY,
+            dist:0,stopped:false,trail:[],chart:[],t:0};
+    });
+    exp1.running=true;exp1.done=false;exp1.t=0;
+    vpState[1].running=true;vpState[1].maxX=0;hideVP(1);
+    document.getElementById('charts1').classList.remove('show');
+    exp1Tick();
+}
+function exp1Tick() {
+    if(!exp1.running)return;
+    const dt=1/60,g=600;let allDone=true;
+    exp1.t+=dt;
+    exp1.carts.forEach(c=>{
+        if(c.stopped)return;allDone=false;
+        if(c.onRamp){
+            const dx=c.rampBotX-c.rampTopX,dy=c.rampBotY-c.rampTopY;
+            const L=Math.sqrt(dx*dx+dy*dy),sinA=dy/L,cosA=dx/L;
+            const a=g*sinA;  // On the ramp, no surface friction — ensures same initial velocity
+            const spd=Math.sqrt(c.vx*c.vx+c.vy*c.vy)+a*dt;
+            c.vx=cosA*spd;c.vy=sinA*spd;c.x+=c.vx*dt;c.y+=c.vy*dt;
+            if(c.y>=c.groundY){c.y=c.groundY;c.onRamp=false;c.vx=Math.sqrt(c.vx*c.vx+c.vy*c.vy);c.vy=0;c.t=exp1.t;}
+        }else{
+            c.vx-=c.s.mu*g*dt;if(c.vx<0)c.vx=0;
+            c.x+=c.vx*dt;c.dist=c.x-c.rampBotX;
+            if(c.chart.length===0||exp1.t-c.chart[c.chart.length-1].t>0.04)
+                c.chart.push({t:exp1.t-c.t, v:c.vx, d:c.dist});
+            if(c.vx<0.5){c.vx=0;c.stopped=true;c.chart.push({t:exp1.t-c.t,v:0,d:c.dist});}
+        }
+        c.trail.push({x:c.x,y:c.y});
+        c.trail.push({x:c.x,y:c.y});
+        vpState[1].maxX=Math.max(vpState[1].maxX,c.x);
+    });
+    exp1Draw();
+    if(allDone){exp1.running=false;exp1.done=true;vpState[1].running=false;showVP(1);vpGo(1,1);exp1ShowResults();}
+    else requestAnimationFrame(exp1Tick);
+}
+function exp1ShowResults() {
+    let h='',sh='';
+    exp1.carts.forEach(c=>{
+        const d=Math.round(c.dist);
+        const sn=c.s.short;
+        h+=`<div style="color:${c.s.color}">● ${sn}: slid <b>${d} px</b></div>`;
+        sh+=`<div class="stat-chip"><div class="label">${sn}</div><div class="value" style="color:${c.s.color}">${d} px</div></div>`;
+    });
+    h+='<div style="margin-top:6px;color:var(--accent)">→ Less friction → longer slide!</div>';
+    document.getElementById('exp1-data').innerHTML=h;
+    document.getElementById('exp1-stats').innerHTML=sh;
+    // Log this run
+    const surfaceIdx = parseInt(document.getElementById('exp1-surface').value);
+    const surfaceLabels = ['Compare All (3 Surfaces)', 'Towel (Rough)', 'Cotton (Medium)', 'Wood (Smooth)'];
+    const resultsObj = {};
+    exp1.carts.forEach(c => { resultsObj[c.s.name + ' — distance'] = Math.round(c.dist) + ' px'; });
+    logRun("Experiment 1: Galileo's Inclined Plane", {
+        'Surface': surfaceLabels[surfaceIdx],
+        'Ramp Height': document.getElementById('exp1-height').value + ' px',
+        'Ball Mass': document.getElementById('exp1-mass').value + ' kg'
+    }, resultsObj);
+    // Draw charts
+    const series=exp1.carts.map(c=>({data:c.chart,color:c.s.color,label:c.s.name}));
+    document.getElementById('charts1').classList.add('show');
+    requestAnimationFrame(()=>{
+        drawChart('chart1-vt',series,'t','v','t / s','v / (px·s⁻¹)');
+        
+    });
+}
+function exp1Draw() {
+    ensureCanvas(0);
+    const c=document.getElementById('canvas1'),ctx=c.getContext('2d');
+    const w=c.width/2,h=c.height/2;ctx.clearRect(0,0,w,h);
+    const rampH=parseInt(document.getElementById('exp1-height').value);
+    const rampBaseX=100,rampLen=150,groundY=290;
+    const topX=rampBaseX,topY=groundY-rampH,botX=rampBaseX+rampLen;
+    const camX=getView(1,w,vpState[1].maxX,botX);
+    ctx.save();ctx.translate(-camX,0);
+    const ext=w+camX+200;
+    drawGrid(ctx,ext,h);
+    // Ground
+    ctx.fillStyle='rgba(255,255,255,0.04)';ctx.fillRect(-50,groundY,ext+100,h-groundY);
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(-50,groundY);ctx.lineTo(ext,groundY);ctx.stroke();
+    // Ramp
+    ctx.fillStyle='rgba(0,212,255,0.08)';ctx.beginPath();ctx.moveTo(topX,topY);ctx.lineTo(botX,groundY);ctx.lineTo(topX,groundY);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(0,212,255,0.4)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(topX,topY);ctx.lineTo(botX,groundY);ctx.stroke();
+    // Height
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(topX-18,topY);ctx.lineTo(topX-18,groundY);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#8892a8';ctx.font='12px Inter';ctx.textAlign='center';
+    ctx.fillText('h='+rampH,topX-32,(topY+groundY)/2);
+    // Carts
+    exp1.carts.forEach(cart=>{
+        if(cart.trail.length>1){ctx.strokeStyle=cart.s.color+'40';ctx.lineWidth=2;ctx.beginPath();cart.trail.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.stroke();}
+        ctx.fillStyle=cart.s.color;ctx.beginPath();ctx.arc(cart.x,cart.y-7,9,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle=cart.s.color+'70';ctx.fillRect(cart.x-12,cart.y-14,24,10);
+        if(!cart.onRamp&&cart.dist>15){
+            ctx.fillStyle=cart.s.color;ctx.font='bold 11px Inter';ctx.textAlign='center';
+            ctx.fillText(Math.round(cart.dist)+'px',(cart.rampBotX+cart.x)/2,groundY+16+cart.si*14);
+            ctx.strokeStyle=cart.s.color+'50';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+            ctx.beginPath();ctx.moveTo(cart.rampBotX,groundY+8+cart.si*14);ctx.lineTo(cart.x,groundY+8+cart.si*14);ctx.stroke();ctx.setLineDash([]);
+        }
+    });
+    ctx.fillStyle='#8892a8';ctx.font='12px Inter';ctx.textAlign='left';
+    ctx.fillText('Released from same height',topX+10,topY-10);
+    ctx.restore();
+}
+document.getElementById('exp1-height').addEventListener('input',function(){document.getElementById('exp1-height-val').textContent=this.value+' px';if(!exp1.running)exp1Draw();});
+
+// ======================== EXPERIMENT 2 ========================
+let exp2={running:false,ball:null,done:false};
+
+function exp2Reset(){
+    exp2={running:false,ball:null,done:false};
+    vpState[2].running=false;vpState[2].maxX=0;hideVP(2);
+    document.getElementById('exp2-data').innerHTML='Adjust parameters and release the ball';
+    document.getElementById('charts2').classList.remove('show');
+    ['exp2-stat-h0','exp2-stat-h1','exp2-stat-dist','exp2-stat-loss'].forEach(id=>document.getElementById(id).textContent='—');
+    exp2Draw();
+}
+function exp2Start(){
+    if(exp2.running)return;
+    const rAngle=parseInt(document.getElementById('exp2-angle').value);
+    const relH=parseInt(document.getElementById('exp2-release').value);
+    const fric=parseFloat(document.getElementById('exp2-friction').value);
+    const g=500,groundY=310,valleyX=340,lAngle=40;
+    const lRad=lAngle*Math.PI/180,rRad=rAngle*Math.PI/180;
+    const lLen=relH/Math.sin(lRad);
+    const lTopX=valleyX-lLen*Math.cos(lRad),lTopY=groundY-relH;
+    exp2.ball={x:lTopX,y:lTopY,vx:0,vy:0,phase:'left-down',groundY,valleyX,
+        lAngle:lRad,rAngle:rRad,relH,fric,g,lTopX,lTopY,maxH:0,rightDist:0,trail:[],chart:[]};
+    exp2.running=true;exp2.done=false;exp2.t=0;
+    vpState[2].running=true;vpState[2].maxX=0;hideVP(2);
+    document.getElementById('charts2').classList.remove('show');
+    document.getElementById('exp2-stat-h0').textContent=relH+' px';
+    exp2Tick();
+}
+function exp2Tick(){
+    if(!exp2.running)return;
+    const dt=1/60,b=exp2.ball;
+    exp2.t+=dt;
+    if(b.phase==='left-down'){
+        const sinA=Math.sin(b.lAngle),cosA=Math.cos(b.lAngle);
+        const a=b.g*(sinA-b.fric*cosA);
+        const spd=Math.sqrt(b.vx*b.vx+b.vy*b.vy)+a*dt;
+        b.vx=cosA*spd;b.vy=sinA*spd;b.x+=b.vx*dt;b.y+=b.vy*dt;
+        if(b.y>=b.groundY){b.y=b.groundY;const s2=Math.sqrt(b.vx*b.vx+b.vy*b.vy);b.phase='right-up';b.vx=Math.cos(b.rAngle)*s2;b.vy=-Math.sin(b.rAngle)*s2;}
+    }else if(b.phase==='right-up'){
+        const sinA=Math.sin(b.rAngle),cosA=Math.cos(b.rAngle);
+        if(b.rAngle<0.001){
+            let spd=Math.sqrt(b.vx*b.vx+b.vy*b.vy);
+            const a=b.fric>0?b.g*b.fric:0;
+            spd-=a*dt;if(spd<0)spd=0;
+            b.vx=spd;b.vy=0;b.x+=b.vx*dt;b.y=b.groundY;
+        } else {
+            const a=b.g*(sinA+b.fric*cosA);
+            let spd=Math.sqrt(b.vx*b.vx+b.vy*b.vy)-a*dt;if(spd<0)spd=0;
+            b.vx=cosA*spd;b.vy=-sinA*spd;b.x+=b.vx*dt;b.y+=b.vy*dt;
+        }
+        b.rightDist=b.x-b.valleyX;b.maxH=Math.max(b.maxH,b.groundY-b.y);
+        const maxDur2=parseFloat(document.getElementById('exp2-duration').value);
+        const spd2=Math.sqrt(b.vx*b.vx+b.vy*b.vy);
+        if(spd2<=0.5||b.rightDist>6000||exp2.t>=maxDur2){b.phase='done';exp2.running=false;exp2.done=true;vpState[2].running=false;showVP(2);vpGo(2,1);exp2ShowResults();}
+    }
+    const spdNow=Math.sqrt(b.vx*b.vx+b.vy*b.vy);
+    const distNow=Math.sqrt((b.x-b.lTopX)**2+(b.y-b.lTopY)**2);
+    if(b.chart.length===0||exp2.t-b.chart[b.chart.length-1].t>0.04)
+        b.chart.push({t:exp2.t,v:spdNow,d:b.rightDist>0?b.rightDist:0});
+    b.trail.push({x:b.x,y:b.y});vpState[2].maxX=Math.max(vpState[2].maxX,b.x);
+    exp2Draw();
+    if(exp2.running)requestAnimationFrame(exp2Tick);
+}
+function exp2ShowResults(){
+    const b=exp2.ball;const h1=Math.round(b.maxH),dist=Math.round(b.rightDist);
+    const loss=b.relH>0?Math.round((1-h1/b.relH)*100):0;
+    document.getElementById('exp2-stat-h1').textContent=h1+' px';
+    document.getElementById('exp2-stat-dist').textContent=dist+' px';
+    document.getElementById('exp2-stat-loss').textContent=loss+'%';
+    document.getElementById('exp2-data').innerHTML=`Release height: ${b.relH} px<br>Final height: ${h1} px<br>Distance: ${dist} px<br><span style="color:var(--accent)">→ Smaller angle, longer distance!</span>`;
+    // Log this run
+    logRun("Experiment 2: Thought Experiment", {
+        'Right Ramp Angle': document.getElementById('exp2-angle').value + '°',
+        'Release Height': b.relH + ' px',
+        'Friction': parseFloat(document.getElementById('exp2-friction').value).toFixed(2),
+        'Max Duration': document.getElementById('exp2-duration').value + ' s'
+    }, {
+        'Final Height': h1 + ' px',
+        'Horizontal Distance': dist + ' px',
+        'Energy Loss': loss + '%',
+        'Elapsed Time': exp2.t.toFixed(1) + ' s'
+    });
+    const lastPoint = b.chart[b.chart.length - 1];
+    if (!lastPoint || Math.abs(lastPoint.t - exp2.t) > 0.001) {
+        b.chart.push({t:exp2.t,v:Math.sqrt(b.vx*b.vx+b.vy*b.vy),d:b.rightDist});
+    }
+    const series=[{data:b.chart,color:'#ffd93d',label:'Ball'}];
+    document.getElementById('charts2').classList.add('show');
+    requestAnimationFrame(()=>{
+        drawChart('chart2-vt',series,'t','v','t / s','v / (px·s⁻¹)');
+        
+    });
+}
+function exp2Draw(){
+    ensureCanvas(1);
+    const c=document.getElementById('canvas2'),ctx=c.getContext('2d');
+    const w=c.width/2,h=c.height/2;ctx.clearRect(0,0,w,h);
+    const rAngle=parseInt(document.getElementById('exp2-angle').value);
+    const relH=parseInt(document.getElementById('exp2-release').value);
+    const groundY=310,valleyX=340,lAngle=40;
+    const lRad=lAngle*Math.PI/180,rRad=rAngle*Math.PI/180;
+    const lLen=relH/Math.sin(lRad);
+    const lTopX=valleyX-lLen*Math.cos(lRad),lTopY=groundY-relH;
+    const ball=exp2.ball;
+
+    const camX=getView(2,w,vpState[2].maxX,valleyX);
+    ctx.save();ctx.translate(-camX,0);
+    const ext=w+camX+300;
+
+    // Right ramp — fixed long length so it doesn't grow during the run.
+    // For near-horizontal angles, use 6000 (matches the simulation's distance cap).
+    // For sloped angles, use the energy-bounded max length (ball can't exceed initial height),
+    // capped at 6000 so steep ramps don't reach absurd visual heights.
+    const rVis = rRad < 0.01 ? 6000 : Math.min(relH / Math.sin(rRad) * 1.05, 6000);
+    const rTopX=valleyX+rVis*Math.cos(rRad),rTopY=groundY-rVis*Math.sin(rRad);
+
+    drawGrid(ctx,ext,h);
+    // Ground
+    ctx.fillStyle='rgba(255,255,255,0.04)';ctx.fillRect(-100,groundY,ext+200,h-groundY);
+    ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-100,groundY);ctx.lineTo(ext,groundY);ctx.stroke();
+    // Left ramp
+    ctx.fillStyle='rgba(0,212,255,0.06)';ctx.beginPath();ctx.moveTo(lTopX,lTopY);ctx.lineTo(valleyX,groundY);ctx.lineTo(lTopX,groundY);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(0,212,255,0.5)';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(lTopX,lTopY);ctx.lineTo(valleyX,groundY);ctx.stroke();
+    // Right ramp
+    ctx.fillStyle='rgba(255,107,53,0.06)';ctx.beginPath();ctx.moveTo(valleyX,groundY);ctx.lineTo(rTopX,rTopY);ctx.lineTo(rTopX,groundY);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(255,107,53,0.5)';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(valleyX,groundY);ctx.lineTo(rTopX,rTopY);ctx.stroke();
+    // Height dashes
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(lTopX,lTopY);ctx.lineTo(lTopX,groundY);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(lTopX-30,lTopY);ctx.lineTo(valleyX+30,lTopY);ctx.stroke();
+    ctx.setLineDash([]);
+    // Labels
+    ctx.fillStyle='#8892a8';ctx.font='12px Inter';ctx.textAlign='center';
+    ctx.fillText(lAngle+'°',valleyX-35,groundY-8);ctx.fillText(rAngle+'°',valleyX+45,groundY-8);
+    ctx.fillText('h='+relH,lTopX-28,(lTopY+groundY)/2);
+    // Distance ruler
+    if(ball&&ball.rightDist>30){
+        const ry=groundY+18;ctx.strokeStyle='rgba(255,212,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+        ctx.beginPath();ctx.moveTo(valleyX,ry);ctx.lineTo(ball.x,ry);ctx.stroke();ctx.setLineDash([]);
+        ctx.fillStyle='#ffd93d';ctx.font='bold 11px Inter';ctx.textAlign='center';
+        ctx.fillText(Math.round(ball.rightDist)+' px',(valleyX+ball.x)/2,ry+16);
+    }
+    // Trail
+    if(ball&&ball.trail.length>1){ctx.strokeStyle='rgba(255,212,0,0.3)';ctx.lineWidth=2;ctx.beginPath();ball.trail.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.stroke();}
+    // Ball
+    if(ball){ctx.fillStyle='#ffd93d';ctx.shadowColor='rgba(255,217,61,0.5)';ctx.shadowBlur=12;ctx.beginPath();ctx.arc(ball.x,ball.y-8,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
+    else{ctx.fillStyle='#ffd93d60';ctx.beginPath();ctx.arc(lTopX,lTopY-8,10,0,Math.PI*2);ctx.fill();}
+    // World labels
+    ctx.fillStyle='#556';ctx.font='11px Inter';ctx.textAlign='left';
+    ctx.fillText('Left (fixed 40°)',lTopX,lTopY-22);
+    ctx.fillText('Right ('+rAngle+'°)',valleyX+10,Math.min(rTopY-10,groundY-36));
+    ctx.restore();
+}
+document.getElementById('exp2-angle').addEventListener('input',function(){document.getElementById('exp2-angle-val').textContent=this.value+'°';if(!exp2.running)exp2Draw();});
+document.getElementById('exp2-release').addEventListener('input',function(){document.getElementById('exp2-release-val').textContent=this.value+' px';if(!exp2.running)exp2Draw();});
+document.getElementById('exp2-friction').addEventListener('input',function(){document.getElementById('exp2-friction-val').textContent=parseFloat(this.value).toFixed(2);});
+document.getElementById('exp2-duration').addEventListener('input',function(){document.getElementById('exp2-duration-val').textContent=this.value+' s';});
+
+// ======================== EXPERIMENT 3 ========================
+let exp3={running:false,slider:null,done:false,ticks:[],lastTick:0};
+
+function exp3Reset(){
+    exp3={running:false,slider:null,done:false,ticks:[],lastTick:0};
+    vpState[3].running=false;vpState[3].maxX=0;hideVP(3);
+    document.getElementById('exp3-data').innerHTML='Push the slider to observe data';
+    document.getElementById('charts3').classList.remove('show');
+    ['exp3-stat-v','exp3-stat-d','exp3-stat-t','exp3-stat-a'].forEach(id=>document.getElementById(id).textContent='—');
+    exp3Draw();
+}
+function exp3Start(){
+    if(exp3.running)return;
+    const mode=document.getElementById('exp3-mode').value;const airOn=mode!=='off';
+    const push=parseFloat(document.getElementById('exp3-push').value);
+    const g=500,trackY=250,startX=100;
+    const muVal=mode==='ideal'?0:mode==='on'?0.003:0.15;
+    exp3.slider={x:startX,vx:push*100,trackY,startX,friction:muVal*g,airOn,mode,time:0,initialV:push*100,trail:[],chart:[]};
+    exp3.ticks=[];exp3.lastTick=0;exp3.running=true;exp3.done=false;
+    vpState[3].running=true;vpState[3].maxX=0;hideVP(3);
+    document.getElementById('charts3').classList.remove('show');
+    exp3Tick();
+}
+function exp3Tick(){
+    if(!exp3.running)return;
+    const dt=1/60,s=exp3.slider;
+    s.vx-=s.friction*dt;if(s.vx<0)s.vx=0;
+    s.x+=s.vx*dt;s.time+=dt;
+    s.trail.push({x:s.x,t:s.time,v:s.vx});
+    // Sample for chart every ~0.05s
+    const dist=s.x-s.startX;
+    if(s.chart.length===0||s.time-s.chart[s.chart.length-1].t>0.04)
+        s.chart.push({t:s.time,v:s.vx,d:dist});
+    vpState[3].maxX=Math.max(vpState[3].maxX,s.x);
+    if(Math.floor(s.time/0.5)>exp3.lastTick){exp3.lastTick=Math.floor(s.time/0.5);exp3.ticks.push({x:s.x,t:s.time,v:s.vx});}
+    document.getElementById('exp3-stat-v').textContent=s.vx.toFixed(1)+' px/s';
+    document.getElementById('exp3-stat-d').textContent=Math.round(dist)+' px';
+    document.getElementById('exp3-stat-t').textContent=s.time.toFixed(1)+' s';
+    document.getElementById('exp3-stat-a').textContent='-'+(s.initialV>0?((s.initialV-s.vx)/s.initialV*100).toFixed(1):0)+'%';
+    exp3Draw();
+    const maxDur=parseFloat(document.getElementById('exp3-duration').value);
+    if(s.vx<=0.5||s.time>=maxDur){exp3.running=false;exp3.done=true;vpState[3].running=false;showVP(3);vpGo(3,1);exp3ShowResults();}
+    else requestAnimationFrame(exp3Tick);
+}
+function exp3ShowResults(){
+    const marks=exp3.ticks;const s=exp3.slider;
+    if(marks.length<2){document.getElementById('exp3-data').innerHTML='Motion duration too short';return;}
+    let html='<table style="width:100%;font-size:11px;border-collapse:collapse">';
+    html+='<tr style="color:var(--accent)"><td>Time</td><td>Position</td><td>Gap</td><td>Velocity</td></tr>';
+    for(let i=0;i<marks.length&&i<10;i++){
+        const gap=i>0?Math.round(marks[i].x-marks[i-1].x):'—';
+        html+=`<tr style="border-top:1px solid rgba(255,255,255,0.05)"><td>${marks[i].t.toFixed(1)}s</td><td>${Math.round(marks[i].x)}</td><td>${gap}</td><td>${marks[i].v.toFixed(1)}</td></tr>`;
+    }
+    html+='</table>';
+    const maxDur=parseFloat(document.getElementById('exp3-duration').value);
+    const stoppedByTime=s.time>=maxDur&&s.vx>0.5;
+    if(s.mode==='ideal'||s.airOn){
+        html+=stoppedByTime
+            ?'<div style="margin-top:6px;color:var(--success)">→ Reached max duration '+maxDur+'s, velocity still '+s.vx.toFixed(1)+' px/s — nearly uniform!</div>'
+            :'<div style="margin-top:6px;color:var(--success)">→ Gaps nearly equal — nearly uniform straight-line motion!</div>';
+    }else{
+        html+='<div style="margin-top:6px;color:var(--warm)">→ Gaps shrink as velocity decreases to zero</div>';
+    }
+    document.getElementById('exp3-data').innerHTML=html;
+    s.chart.push({t:s.time,v:s.vx,d:s.x-s.startX});
+    // Log this run
+    const modeFullLabels = {ideal:'Ideal (Frictionless)', on:'On (Nearly Frictionless)', off:'Off (With Friction)'};
+    const sampledPositions = marks.slice(0, 10).map(m =>
+        't=' + m.t.toFixed(1) + 's @ x=' + Math.round(m.x) + 'px, v=' + m.v.toFixed(1) + 'px/s'
+    ).join(' | ');
+    logRun("Experiment 3: Air Track", {
+        'Mode': modeFullLabels[s.mode] || s.mode,
+        'Initial Push': parseFloat(document.getElementById('exp3-push').value).toFixed(1),
+        'Max Duration': document.getElementById('exp3-duration').value + ' s'
+    }, {
+        'Initial Velocity': s.initialV.toFixed(1) + ' px/s',
+        'Final Velocity': s.vx.toFixed(1) + ' px/s',
+        'Total Distance': Math.round(s.x - s.startX) + ' px',
+        'Elapsed Time': s.time.toFixed(1) + ' s',
+        'Velocity Decrease': (s.initialV>0?((s.initialV-s.vx)/s.initialV*100).toFixed(1):'0') + '%',
+        'Sampled Positions': sampledPositions || '(none)'
+    });
+    const clr=s.mode==='ideal'?'#00e676':s.mode==='on'?'#00d4ff':'#ff6b35';
+    const modeLabels={ideal:'Ideal (Frictionless)',on:'Air On',off:'Air Off'};const lbl=modeLabels[s.mode]||'Air On';
+    const series=[{data:s.chart,color:clr,label:lbl}];
+    document.getElementById('charts3').classList.add('show');
+    requestAnimationFrame(()=>{
+        drawChart('chart3-vt',series,'t','v','t / s','v / (px·s⁻¹)');
+        
+    });
+}
+function exp3Draw(){
+    ensureCanvas(2);
+    const c=document.getElementById('canvas3'),ctx=c.getContext('2d');
+    const w=c.width/2,h=c.height/2;ctx.clearRect(0,0,w,h);
+    const trackY=250,trackH=16,startX=100;
+    const s=exp3.slider;const sx=s?s.x:startX;
+    const mode3=document.getElementById('exp3-mode').value;const airOn=mode3!=='off';
+    const mu=mode3==='ideal'?0:mode3==='on'?0.003:0.15;
+    const camX=getView(3,w,vpState[3].maxX,startX);
+    ctx.save();ctx.translate(-camX,0);
+    const ext=w+camX+300;
+    drawGrid(ctx,ext,h);
+    // Track
+    ctx.fillStyle='rgba(255,255,255,0.04)';ctx.fillRect(40,trackY-trackH,ext-40,trackH*2.5);
+    ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=2;ctx.strokeRect(40,trackY-trackH,ext-40,trackH*2.5);
+    // Air holes
+    if(mode3==='on'){const hEnd=Math.min(ext-20,sx+w+100);for(let x=60;x<hEnd;x+=18){ctx.fillStyle='rgba(0,212,255,0.15)';ctx.beginPath();ctx.arc(x,trackY+2,2,0,Math.PI*2);ctx.fill();if(Math.random()>0.6){ctx.strokeStyle='rgba(0,212,255,0.08)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,trackY);ctx.lineTo(x+(Math.random()-0.5)*5,trackY-6-Math.random()*5);ctx.stroke();}}}else if(mode3==='ideal'){const hEnd=Math.min(ext-20,sx+w+100);for(let x=60;x<hEnd;x+=30){ctx.fillStyle='rgba(0,230,118,0.12)';ctx.beginPath();ctx.arc(x,trackY+2,3,0,Math.PI*2);ctx.fill();}}
+    // Ruler
+    ctx.fillStyle='rgba(255,255,255,0.06)';ctx.font='9px Inter';ctx.textAlign='center';
+    for(let x=startX;x<ext;x+=50){ctx.fillRect(x,trackY+trackH+5,1,5);ctx.fillText(x-startX,x,trackY+trackH+20);}
+    // Tick marks
+    exp3.ticks.forEach(m=>{ctx.strokeStyle='rgba(255,212,0,0.5)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(m.x,trackY-trackH-8);ctx.lineTo(m.x,trackY-trackH+2);ctx.stroke();ctx.fillStyle='#ffd93d80';ctx.font='9px Inter';ctx.textAlign='center';ctx.fillText(m.t.toFixed(1)+'s',m.x,trackY-trackH-14);});
+    // Slider block
+    const sy=trackY-trackH-2;const hover=mode3==='ideal'?6+Math.sin(Date.now()/150)*2:airOn?4+Math.sin(Date.now()/200)*1.5:0;
+    ctx.fillStyle=mode3==='ideal'?'rgba(0,230,118,0.9)':airOn?'rgba(0,212,255,0.9)':'rgba(255,107,53,0.9)';
+    ctx.shadowColor=mode3==='ideal'?'rgba(0,230,118,0.4)':airOn?'rgba(0,212,255,0.4)':'rgba(255,107,53,0.3)';ctx.shadowBlur=10;
+    const bw=36,bh=18;ctx.beginPath();rrect(ctx,sx-bw/2,sy-bh-hover,bw,bh,4);ctx.fill();ctx.shadowBlur=0;
+    // Velocity arrow
+    if(s&&s.vx>5){const aLen=Math.min(s.vx/3,70);ctx.strokeStyle='rgba(0,230,118,0.7)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx+bw/2+3,sy-bh/2-hover);ctx.lineTo(sx+bw/2+3+aLen,sy-bh/2-hover);ctx.stroke();ctx.fillStyle='rgba(0,230,118,0.7)';ctx.beginPath();ctx.moveTo(sx+bw/2+3+aLen,sy-bh/2-hover);ctx.lineTo(sx+bw/2+aLen-2,sy-bh/2-hover-4);ctx.lineTo(sx+bw/2+aLen-2,sy-bh/2-hover+4);ctx.closePath();ctx.fill();ctx.fillStyle='#00e676';ctx.font='bold 10px Inter';ctx.textAlign='left';ctx.fillText('v='+s.vx.toFixed(0),sx+bw/2+8,sy-bh-hover-5);}
+    // Track labels with friction
+    ctx.fillStyle='#8892a8';ctx.font='12px Inter';ctx.textAlign='left';
+    const modeLabel3=mode3==='ideal'?'✨ Ideal · Frictionless':mode3==='on'?'🌬️ Air Track · ON':'Air Track · OFF';ctx.fillText(modeLabel3,50,trackY+trackH+42);
+    ctx.fillStyle=mode3==='ideal'?'rgba(0,230,118,0.6)':mode3==='on'?'rgba(0,212,255,0.6)':'rgba(255,107,53,0.6)';ctx.font='bold 12px Inter';
+    // μ value hidden
+    if(mode3==='on'){ctx.fillStyle='rgba(0,212,255,0.25)';ctx.font='10px Inter';ctx.fillText('↑ Air levitation',50,trackY+12);}else if(mode3==='ideal'){ctx.fillStyle='rgba(0,230,118,0.25)';ctx.font='10px Inter';ctx.fillText('✦ Ideal · Frictionless',50,trackY+12);}
+    ctx.restore();
+}
+document.getElementById('exp3-push').addEventListener('input',function(){document.getElementById('exp3-push-val').textContent=parseFloat(this.value).toFixed(1);});
+document.getElementById('exp3-duration').addEventListener('input',function(){document.getElementById('exp3-duration-val').textContent=this.value+' s';});
+function exp3UpdateFriction(){
+    const mode=document.getElementById('exp3-mode').value;
+    const muMap={ideal:'0.000',on:'0.003',off:'0.150'};
+    document.getElementById('exp3-mu-val').textContent=muMap[mode]||'0.000';
+    if(!exp3.running)exp3Draw();
+}
+
+// Exp1 extra listeners
+document.getElementById('exp1-mass').addEventListener('input',function(){document.getElementById('exp1-mass-val').textContent=parseFloat(this.value).toFixed(1)+' kg';});
+
+// ======================== CHART DRAWING ========================
+// series: [{data:[{t,v,d},...], color, label}, ...]
+// xKey/yKey: which fields to plot
+function drawChart(canvasId, series, xKey, yKey, xLabel, yLabel) {
+    const c = document.getElementById(canvasId);
+    if (!c) return;
+    const parent = c.parentElement;
+    c.width = parent.clientWidth * 2;
+    c.height = 220 * 2;
+    c.style.height = '220px';
+    const ctx = c.getContext('2d');
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    const W = c.width / 2, H = c.height / 2;
+
+    const pad = { t: 20, r: 20, b: 40, l: 60 };
+    const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+
+    // Find ranges
+    let xMin = Infinity, xMax = -Infinity, yMin = 0, yMax = -Infinity;
+    series.forEach(s => s.data.forEach(p => {
+        const xv = p[xKey], yv = p[yKey];
+        if (xv < xMin) xMin = xv; if (xv > xMax) xMax = xv;
+        if (yv > yMax) yMax = yv;
+    }));
+    if (xMax <= xMin) xMax = xMin + 1;
+    if (yMax <= 0) yMax = 1;
+    yMax *= 1.1; // headroom
+
+    // Background
+    ctx.fillStyle = 'rgba(10,14,26,0.6)';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    const xTicks = niceSteps(xMin, xMax, 6);
+    const yTicks = niceSteps(yMin, yMax, 5);
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    xTicks.forEach(v => {
+        const x = pad.l + ((v - xMin) / (xMax - xMin)) * pw;
+        ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ph); ctx.stroke();
+    });
+    yTicks.forEach(v => {
+        const y = pad.t + ph - ((v - yMin) / (yMax - yMin)) * ph;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + pw, y); ctx.stroke();
+    });
+
+    // Axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t + ph); ctx.lineTo(pad.l + pw, pad.t + ph); ctx.stroke();
+
+    // Tick labels
+    ctx.fillStyle = '#5a6478'; ctx.font = '10px Inter'; ctx.textAlign = 'center';
+    xTicks.forEach(v => {
+        const x = pad.l + ((v - xMin) / (xMax - xMin)) * pw;
+        ctx.fillText(fmtNum(v), x, pad.t + ph + 16);
+    });
+    ctx.textAlign = 'right';
+    yTicks.forEach(v => {
+        const y = pad.t + ph - ((v - yMin) / (yMax - yMin)) * ph;
+        ctx.fillText(fmtNum(v), pad.l - 6, y + 4);
+    });
+
+    // Axis labels
+    ctx.fillStyle = '#8892a8'; ctx.font = '11px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(xLabel, pad.l + pw / 2, H - 4);
+    ctx.save();
+    ctx.translate(14, pad.t + ph / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(yLabel, 0, 0);
+    ctx.restore();
+
+    // Plot lines
+    series.forEach(s => {
+        if (s.data.length < 2) return;
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        s.data.forEach((p, i) => {
+            const x = pad.l + ((p[xKey] - xMin) / (xMax - xMin)) * pw;
+            const y = pad.t + ph - ((p[yKey] - yMin) / (yMax - yMin)) * ph;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        // Endpoint dot
+        const last = s.data[s.data.length - 1];
+        const ex = pad.l + ((last[xKey] - xMin) / (xMax - xMin)) * pw;
+        const ey = pad.t + ph - ((last[yKey] - yMin) / (yMax - yMin)) * ph;
+        ctx.fillStyle = s.color;
+        ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI * 2); ctx.fill();
+    });
+
+    // Legend
+    if (series.length > 1) {
+        let lx = pad.l + 8, ly = pad.t + 8;
+        series.forEach(s => {
+            ctx.fillStyle = s.color;
+            ctx.fillRect(lx, ly, 14, 3);
+            ctx.fillStyle = '#8892a8'; ctx.font = '10px Inter'; ctx.textAlign = 'left';
+            ctx.fillText(s.label, lx + 18, ly + 5);
+            lx += ctx.measureText(s.label).width + 36;
+        });
+    }
+}
+
+function niceSteps(min, max, approxCount) {
+    const range = max - min;
+    if (range <= 0) return [min];
+    const rough = range / approxCount;
+    const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+    let step;
+    const norm = rough / mag;
+    if (norm < 1.5) step = mag;
+    else if (norm < 3.5) step = 2 * mag;
+    else if (norm < 7.5) step = 5 * mag;
+    else step = 10 * mag;
+    const start = Math.ceil(min / step) * step;
+    const ticks = [];
+    for (let v = start; v <= max + step * 0.01; v += step) ticks.push(v);
+    return ticks;
+}
+
+function fmtNum(v) {
+    if (Math.abs(v) < 0.001) return '0';
+    if (Math.abs(v) >= 1000) return Math.round(v).toString();
+    if (Math.abs(v) >= 1) return v.toFixed(1);
+    return v.toFixed(2);
+}
+
+// ======================== RESIZE & INIT ========================
+window.addEventListener('resize',()=>{canvasSized=[false,false,false];ensureCanvas(activeTab);[exp1Draw,exp2Draw,exp3Draw][activeTab]();});
+window.addEventListener('load',()=>{sizeCanvas(0);exp1Draw();});
+</script>
+</body>
+</html>

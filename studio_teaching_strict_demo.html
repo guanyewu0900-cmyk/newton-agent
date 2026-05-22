@@ -1,0 +1,566 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Physics Teaching Platform</title>
+    <link rel="stylesheet" href="./shared.strict.css" />
+    <link rel="stylesheet" href="./studio.strict.css" />
+      <style>
+      .demo-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 2600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-bottom: 1px solid rgba(124, 153, 204, 0.24);
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: 0 10px 30px rgba(41, 66, 109, 0.1);
+        backdrop-filter: blur(8px);
+      }
+      .demo-topbar strong {
+        color: #1f3356;
+        letter-spacing: 0.02em;
+      }
+      .demo-topbar .title-wrap {
+        display: grid;
+        gap: 2px;
+      }
+      .demo-topbar .title-sub {
+        font-size: 12px;
+        color: #60718f;
+      }
+      .demo-topbar .row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      #teachingDemoSection {
+        display: none;
+        padding: 16px;
+      }
+      #teachingDemoSection.active {
+        display: block;
+      }
+      .teaching-demo-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 320px minmax(0, 1fr);
+      }
+      .teaching-demo-card {
+        border: 1px solid rgba(124, 153, 204, 0.24);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 14px 34px rgba(41, 66, 109, 0.1);
+        padding: 14px;
+      }
+      .teaching-demo-list {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .teaching-demo-item {
+        border: 1px solid rgba(124, 153, 204, 0.24);
+        border-radius: 12px;
+        background: linear-gradient(180deg, #ffffff, #f8fbff);
+        padding: 10px;
+        display: grid;
+        gap: 6px;
+      }
+      .teaching-demo-player {
+        border: 1px solid rgba(124, 153, 204, 0.24);
+        border-radius: 12px;
+        min-height: 360px;
+        background: rgba(248, 251, 255, 0.96);
+        overflow: hidden;
+        position: relative;
+      }
+      .teaching-demo-player iframe,
+      .teaching-demo-player video {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
+      .teaching-demo-player .pdf-iframe-clip {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .teaching-demo-player .pdf-iframe-clip.is-rendering::after {
+        content: "Loading...";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(8, 12, 24, 0.72);
+        color: #d9e3ff;
+        font-size: 13px;
+      }
+      .teaching-demo-player .pdf-iframe-clip > iframe {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .teaching-demo-player .ppt-pdf-player-teaching {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+      .teaching-demo-empty {
+        min-height: 300px;
+        color: #60718f;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 16px;
+      }
+      .teaching-demo-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .studio-side-card {
+        border: 1px solid rgba(124, 153, 204, 0.24);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 10px 26px rgba(41, 66, 109, 0.08);
+        padding: 12px;
+      }
+      .studio-side-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .studio-side-head .primary-btn {
+        padding: 8px 12px;
+      }
+      body.teaching-fullscreen-mode {
+        overflow: hidden;
+        background: #ffffff;
+      }
+      body.teaching-fullscreen-mode .demo-topbar {
+        display: none;
+      }
+      body.teaching-fullscreen-mode #teachingDemoSection {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 3500;
+        padding: 0;
+        background: #ffffff;
+      }
+      body.teaching-fullscreen-mode #teachingDemoSection .teaching-demo-shell {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      body.teaching-fullscreen-mode #teachingDemoSection .teaching-demo-shell > .teaching-demo-card:first-child {
+        display: none;
+      }
+      body.teaching-fullscreen-mode #teachingDemoSection .teaching-demo-shell > .teaching-demo-card:last-child {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        height: 100%;
+        min-height: 0;
+        padding: 16px 20px 12px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+      body.teaching-fullscreen-mode #teachingPlayerArea {
+        min-height: 0;
+        height: 100%;
+      }
+      body.teaching-fullscreen-mode #teachingDemoSection .teaching-demo-actions {
+        margin-top: 10px;
+      }
+      body.teaching-playback-mode #teachingDemoSection.active {
+        padding: 0;
+      }
+      body.teaching-playback-mode #teachingDemoSection.active .teaching-demo-shell {
+        grid-template-columns: 1fr;
+        max-width: none;
+        width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        gap: 0;
+      }
+      body.teaching-playback-mode #teachingDemoSection.active .teaching-demo-shell > .teaching-demo-card:first-child {
+        display: none;
+      }
+      body.teaching-playback-mode #teachingDemoSection.active .teaching-demo-shell > .teaching-demo-card:last-child {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 14px 18px 12px;
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+      body.teaching-playback-mode #teachingDemoSection.active #teachingPlayerArea {
+        min-height: 0;
+        height: 100%;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active {
+        padding: 0;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active .teaching-demo-shell {
+        max-width: none;
+        width: 100%;
+        margin: 0;
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active .teaching-demo-shell > .teaching-demo-card:first-child {
+        display: none;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active .teaching-demo-shell > .teaching-demo-card:last-child {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+        padding: 10px 12px 10px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 8px;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active #teachingPlayerArea {
+        border: 0;
+        border-radius: 0;
+        min-height: 0;
+        height: 100%;
+        background: #0a0a0a;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active #teachingPlayerArea .ppt-pdf-player,
+      body.teaching-pdf-focus #teachingDemoSection.active #teachingPlayerArea .ppt-pdf-player iframe {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+      body.teaching-pdf-focus #teachingDemoSection.active #teachingPlayerArea .pdf-iframe-clip-teaching > iframe {
+        left: -236px;
+        width: calc(100% + 236px);
+      }
+      @media (max-width: 1080px) {
+        .teaching-demo-shell {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-topbar">
+      <div class="title-wrap">
+        <strong>Digital Physics Teaching Platform</strong>
+        <div class="title-sub">Course Design and Classroom Activity Management</div>
+      </div>
+      <div class="row">
+        <button class="ghost-btn" id="switchStudioBtn" type="button">Course Editor</button>
+        <button class="primary-btn" id="switchTeachingBtn" type="button">Classroom Player</button>
+      </div>
+    </div>
+<main id="app">
+      <section class="studio-shell" id="studioShell">
+        <section class="studio-main">
+          <header class="studio-toolbar">
+            <div class="studio-project-name-wrap">
+              <div class="studio-project-name" id="projectNameDisplay" title="Click to rename">
+                No project selected
+              </div>
+              <input class="studio-project-name-input hidden" id="projectNameInput" />
+            </div>
+            <div class="studio-toolbar-actions">
+              <button class="ghost-btn" id="saveProjectBtn" type="button">Save</button>
+              <button class="ghost-btn icon-btn" id="undoBtn" type="button" title="Previous step">↶</button>
+              <button class="ghost-btn icon-btn" id="redoBtn" type="button" title="Next step">↷</button>
+              <button class="ghost-btn" id="createModuleBtn" type="button">New Module</button>
+              <button class="ghost-btn" id="publishBtn" type="button">Publish Course</button>
+              <button class="primary-btn" id="previewBtn" type="button">Preview Flow</button>
+            </div>
+          </header>
+
+          <div class="studio-canvas-wrap" id="canvasWrap">
+            <svg class="studio-connection-layer" id="connectionLayer">
+              <defs>
+                <marker
+                  id="arrowHead"
+                  viewBox="0 0 10 10"
+                  refX="8.5"
+                  refY="5"
+                  markerWidth="8"
+                  markerHeight="8"
+                  orient="auto-start-reverse"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f87dd"></path>
+                </marker>
+              </defs>
+            </svg>
+            <div class="studio-module-canvas" id="moduleCanvas"></div>
+            <div class="studio-selection-box hidden" id="selectionBox"></div>
+            <div class="studio-canvas-empty" id="canvasEmpty">Create a project first, then add a module.</div>
+          </div>
+        </section>
+
+        <aside class="studio-sidebar">
+          <div class="studio-side-card">
+            <div class="studio-user-card" id="studioUserCard"></div>
+          </div>
+          <div class="studio-side-card studio-project-list-wrap">
+            <div class="studio-side-head">
+              <div class="studio-side-title">Project Center</div>
+              <button class="primary-btn studio-create-project" id="createProjectBtn" type="button">
+                New Project
+              </button>
+            </div>
+            <div class="studio-project-list" id="projectList"></div>
+          </div>
+        </aside>
+      </section>
+
+      <div class="studio-modal hidden" id="moduleModal">
+        <div class="studio-modal-card">
+          <div class="studio-modal-title">New Module</div>
+          <form class="studio-form" id="moduleForm">
+            <div class="studio-form-row">
+              <label for="moduleContentSelect">Content</label>
+              <select id="moduleContentSelect" name="contentType"></select>
+            </div>
+            <div class="studio-form-row">
+              <label for="moduleNameInput">Module Name</label>
+              <input id="moduleNameInput" name="moduleName" />
+            </div>
+            <div class="studio-form-row">
+              <label for="moduleColorSelect">Module Color</label>
+              <select id="moduleColorSelect" name="color"></select>
+            </div>
+            <div class="studio-form-row">
+              <label for="moduleShapeSelect">Module Shape</label>
+              <select id="moduleShapeSelect" name="shape"></select>
+            </div>
+            <div class="studio-form-message" id="moduleFormMessage"></div>
+            <div class="studio-form-actions">
+              <button class="primary-btn" type="submit">Create Module</button>
+              <button class="ghost-btn" id="moduleModalCancelBtn" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="studio-modal hidden" id="publishModal">
+        <div class="studio-modal-card studio-modal-card-lg">
+          <div class="studio-modal-title">Publish Project</div>
+          <form class="studio-form" id="publishForm">
+            <div class="studio-form-row">
+              <label for="publishNameInput">Project Name</label>
+              <input id="publishNameInput" name="name" required />
+            </div>
+            <div class="studio-form-row">
+              <label for="publishDescriptionInput">Project Description</label>
+              <textarea id="publishDescriptionInput" name="description" rows="3"></textarea>
+            </div>
+            <div class="studio-form-row">
+              <label for="publishCoverInput">Project Cover</label>
+              <input id="publishCoverInput" name="cover" type="file" accept="image/*" />
+            </div>
+            <div class="studio-form-row">
+              <label>Visibility</label>
+              <div class="studio-inline">
+                <label><input type="radio" name="visibility" value="public" checked /> Public</label>
+                <label><input type="radio" name="visibility" value="private" /> Private</label>
+              </div>
+            </div>
+
+            <div class="studio-private-settings hidden" id="privateSettings">
+              <div class="studio-form-row">
+                <label for="classSearchInput">Allowed Classes (searchable)</label>
+                <input id="classSearchInput" placeholder="Enter a class name or ID keyword" />
+                <div class="studio-class-picker" id="classPicker"></div>
+              </div>
+              <div class="studio-form-row">
+                <label for="accessCodeInput">Access Code</label>
+                <input id="accessCodeInput" name="accessCode" maxlength="24" placeholder="At least 4 characters recommended" />
+              </div>
+            </div>
+
+            <div class="studio-form-row">
+              <label>Measurement Modules</label>
+              <div class="studio-inline">
+                <label><input type="checkbox" name="measureAudio" /> Audio Recording</label>
+                <label><input type="checkbox" name="measureVideo" /> Video Recording</label>
+                <label><input type="checkbox" name="measureActions" checked /> Action Log</label>
+              </div>
+            </div>
+
+            <div class="studio-form-row">
+              <div class="studio-inline" style="justify-content: space-between; align-items: center;">
+                <label><input type="checkbox" name="autoPlay" id="publishAutoPlay" /> Auto Play</label>
+                <label style="display: inline-flex; align-items: center; gap: 8px;">
+                  Interval (seconds)
+                  <input
+                    class="studio-autoplay-seconds"
+                    id="publishAutoPlaySeconds"
+                    name="autoPlaySeconds"
+                    type="number"
+                    min="1"
+                    max="600"
+                    step="1"
+                    value="12"
+                  />
+                </label>
+              </div>
+            </div>
+            <div class="studio-form-message" id="publishFormMessage"></div>
+            <div class="studio-form-actions">
+              <button class="primary-btn" type="submit">Publish</button>
+              <button class="ghost-btn" id="publishCancelBtn" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="studio-modal hidden" id="aiAssistantModal">
+        <div class="studio-modal-card">
+          <div class="studio-modal-title">AI Assistant Settings</div>
+          <form class="studio-form" id="aiAssistantForm">
+            <div class="studio-form-row">
+              <label for="aiModelSelect">LLM Model</label>
+              <select id="aiModelSelect"></select>
+              <div class="muted-text" id="aiModelHint"></div>
+            </div>
+            <div class="studio-form-row">
+              <label for="aiSystemPromptInput">Prompt</label>
+              <textarea id="aiSystemPromptInput" rows="4" placeholder="Example: You are a patient science teaching assistant."></textarea>
+            </div>
+            <div class="studio-form-row">
+              <label for="aiKnowledgeInput">Knowledge Base</label>
+              <textarea id="aiKnowledgeInput" rows="6" placeholder="Paste course facts, rules, or resource summaries."></textarea>
+              <div class="studio-inline" style="justify-content: flex-end;">
+                <button class="ghost-btn" id="aiKnowledgeUploadBtn" type="button">Upload Knowledge Files</button>
+              </div>
+              <input
+                id="aiKnowledgeUploadInput"
+                type="file"
+                multiple
+                accept=".txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.htm,.log,.ini,.cfg,.conf,.sql,.py,.js,.ts,.java,.c,.cpp,.h,.hpp,.pdf,.doc,.docx,.xls,.xlsx,text/*,application/json,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                class="hidden"
+              />
+            </div>
+            <div class="studio-form-row">
+              <label for="aiTestQuestionInput">Test Question</label>
+              <textarea id="aiTestQuestionInput" rows="3" placeholder="Enter a question to test the model."></textarea>
+              <button class="ghost-btn" id="aiTestBtn" type="button">Test Answer</button>
+              <pre class="ai-test-response" id="aiTestResponse"></pre>
+            </div>
+            <div class="studio-form-message" id="aiAssistantMessage"></div>
+            <div class="studio-form-actions">
+              <button class="primary-btn" type="submit">Save</button>
+              <button class="ghost-btn" id="aiAssistantCancelBtn" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="studio-modal hidden" id="previewModal">
+        <div class="studio-modal-card studio-modal-card-lg">
+          <div class="studio-preview-head">
+            <div>
+              <div class="studio-modal-title" id="previewProjectTitle">Project Preview</div>
+              <div class="muted-text" id="previewStepInfo"></div>
+            </div>
+            <button class="close-btn" id="previewCloseBtn" type="button">×</button>
+          </div>
+          <div class="studio-preview-body" id="previewBody"></div>
+          <div class="studio-preview-actions">
+            <label><input type="checkbox" id="previewAutoPlayToggle" /> Auto Play</label>
+            <label style="display: inline-flex; align-items: center; gap: 8px;">
+              Interval (seconds)
+              <input
+                class="studio-autoplay-seconds"
+                id="previewAutoPlaySeconds"
+                type="number"
+                min="1"
+                max="600"
+                step="1"
+                value="12"
+              />
+            </label>
+            <button class="ghost-btn" id="previewPrevBtn" type="button">Previous</button>
+            <button class="primary-btn" id="previewNextBtn" type="button">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="studio-context-menu hidden" id="moduleContextMenu">
+        <button type="button" id="moduleUploadAction">Upload File</button>
+        <button type="button" id="moduleRenameAction">Rename</button>
+        <button type="button" id="moduleAIAssistantAction">AI Assistant</button>
+        <div class="studio-submenu-wrap" id="moduleColorMenuWrap">
+          <button type="button" class="studio-submenu-trigger">Change Color ▸</button>
+          <div class="studio-submenu-panel" id="moduleColorPanel"></div>
+        </div>
+        <div class="studio-submenu-wrap" id="moduleShapeMenuWrap">
+          <button type="button" class="studio-submenu-trigger">Change Shape ▸</button>
+          <div class="studio-submenu-panel" id="moduleShapePanel"></div>
+        </div>
+        <div class="studio-submenu-wrap hidden" id="quizTemplateMenuWrap">
+          <button type="button" class="studio-submenu-trigger">Download Examples ▸</button>
+          <div class="studio-submenu-panel">
+            <button type="button" data-quiz-template-file="all_in_one_template.zip">All Question Types</button>
+            <button type="button" data-quiz-template-file="quiz_usage_guide.txt">Usage Guide</button>
+          </div>
+        </div>
+        <button type="button" id="moduleDeleteAction">Delete Module</button>
+      </div>
+      <div class="studio-context-menu hidden" id="connectionContextMenu">
+        <button type="button" id="connectionDeleteAction">Delete Connection</button>
+      </div>
+      <div class="studio-context-menu hidden" id="projectContextMenu">
+        <button type="button" id="projectDuplicateAction">Duplicate Project</button>
+        <button type="button" id="projectDeleteAction">Delete Project</button>
+      </div>
+      <input class="hidden" id="moduleUploadInput" type="file" />
+    </main>
+    <section id="teachingDemoSection">
+      <div class="teaching-demo-shell">
+        <article class="teaching-demo-card">
+          <h2 class="section-title">Published Projects</h2>
+          <div class="teaching-demo-list" id="teachingProjectList"></div>
+        </article>
+        <article class="teaching-demo-card">
+          <div class="row" style="justify-content: space-between; align-items: center;">
+            <h2 class="section-title" style="margin: 0;" id="teachingPlayerTitle">Classroom Player</h2>
+            <div class="muted-text" id="teachingPlayerStep"></div>
+          </div>
+          <div class="teaching-demo-player" id="teachingPlayerArea">
+            <div class="teaching-demo-empty">Publish a project in the course editor first, then play it here.</div>
+          </div>
+          <div class="teaching-demo-actions">
+            <button class="ghost-btn" id="teachingPrevBtn" type="button">Previous Step</button>
+            <button class="primary-btn" id="teachingNextBtn" type="button">Next Step</button>
+          </div>
+        </article>
+      </div>
+    </section>
+    <script src="./studio_teaching_strict.js"></script>
+  </body>
+</html>
+
+
