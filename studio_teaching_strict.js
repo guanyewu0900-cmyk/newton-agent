@@ -1506,7 +1506,7 @@ async function init() {
   if (!canInit) return;
   clearLegacyLocalStateKeys();
 
-  dom.userCard.innerHTML = '<img alt="avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2288%22 height=%2288%22%3E%3Crect width=%2288%22 height=%2288%22 rx=%2244%22 fill=%22%230e1e3f%22/%3E%3Ccircle cx=%2244%22 cy=%2232%22 r=%2215%22 fill=%22%237db8ff%22/%3E%3Cpath d=%22M15 71c6-13 16-21 29-21s23 8 29 21%22 fill=%22%237db8ff%22/%3E%3C/svg%3E"/><div class="studio-user-name">Mr. Liu</div><div class="studio-user-role">Physics Teaching Group</div></div>';
+  dom.userCard.innerHTML = '<img alt="avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2288%22 height=%2288%22%3E%3Crect width=%2288%22 height=%2288%22 rx=%2244%22 fill=%22%230e1e3f%22/%3E%3Ccircle cx=%2244%22 cy=%2232%22 r=%2215%22 fill=%22%237db8ff%22/%3E%3Cpath d=%22M15 71c6-13 16-21 29-21s23 8 29 21%22 fill=%22%237db8ff%22/%3E%3C/svg%3E"/><div><div class="studio-user-name">Mr. Liu</div><div class="studio-user-role">Physics Teaching Group</div></div>';
   dom.moduleContentSelect.innerHTML = CONTENT_OPTIONS.map((o) => `<option value="${o.key}">${o.label}</option>`).join("");
   dom.moduleColorSelect.innerHTML = COLOR_OPTIONS.map((c) => `<option value="${c}">${c}</option>`).join("");
   dom.moduleShapeSelect.innerHTML = SHAPE_OPTIONS.map((s) => `<option value="${s}">${s}</option>`).join("");
@@ -2016,7 +2016,6 @@ async function init() {
 }
 
 init();
-
 
 
 
