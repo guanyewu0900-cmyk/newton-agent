@@ -37,6 +37,14 @@ select {
   font: inherit;
 }
 
+label,
+input,
+select,
+textarea,
+button {
+  color: inherit;
+}
+
 .site-header {
   position: sticky;
   top: 0;

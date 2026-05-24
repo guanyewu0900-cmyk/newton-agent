@@ -1323,8 +1323,18 @@ function renderAiAssistantPlayer(container, module, mode) {
   container.innerHTML = `
     <div class="quiz-player">
       <div class="quiz-player-head">
-        <h3>${escapeHtml(module.moduleName)} · AI Assistant</h3>
-        ${showContextMeta ? `<p>Model: ${escapeHtml(cfg.model)}</p>` : ""}
+        <div class="ai-bot-head ${chat.sending ? "is-speaking" : ""}">
+          <div class="ai-bot-avatar" aria-hidden="true">
+            <span class="ai-bot-eye left"></span>
+            <span class="ai-bot-eye right"></span>
+            <span class="ai-bot-mouth"></span>
+            <span class="ai-bot-antenna"></span>
+          </div>
+          <div>
+            <h3>${escapeHtml(module.moduleName)} · AI Assistant</h3>
+            ${showContextMeta ? `<p>Model: ${escapeHtml(cfg.model)}</p>` : ""}
+          </div>
+        </div>
       </div>
       <div class="quiz-form">
         ${showContextMeta ? `

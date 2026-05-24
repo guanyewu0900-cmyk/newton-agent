@@ -1412,24 +1412,29 @@ body::before {
   text-overflow: ellipsis;
   word-break: break-word;
   overflow-wrap: anywhere;
+  color: #edfaff;
+  text-shadow: 0 0 12px rgba(72, 231, 255, 0.32);
 }
 
 .studio-node-title {
   -webkit-line-clamp: 2;
-  max-height: 38px;
-  font-size: 13px;
+  max-height: 36px;
+  font-size: 12px;
+  line-height: 1.38;
   min-width: 0;
 }
 
 .studio-node-sub {
   -webkit-line-clamp: 1;
   max-height: 18px;
+  color: rgba(220, 244, 255, 0.82);
 }
 
 .studio-node-status {
-  -webkit-line-clamp: 2;
-  max-height: 34px;
+  -webkit-line-clamp: 1;
+  max-height: 18px;
   margin-top: 4px;
+  font-size: 11px;
 }
 
 .studio-node[data-shape="circle"] {
@@ -1439,8 +1444,10 @@ body::before {
 
 .studio-node[data-shape="diamond"],
 .studio-node[data-shape="hex"] {
-  height: 132px;
-  min-height: 132px;
+  width: 220px;
+  height: 176px;
+  min-height: 176px;
+  padding: 36px 46px;
 }
 
 .studio-node[data-shape="diamond"] .studio-node-title,
@@ -1449,7 +1456,12 @@ body::before {
 .studio-node[data-shape="hex"] .studio-node-title,
 .studio-node[data-shape="hex"] .studio-node-sub,
 .studio-node[data-shape="hex"] .studio-node-status {
-  max-width: 122px;
+  max-width: 116px;
+}
+
+.studio-node[data-shape="diamond"] .studio-node-status,
+.studio-node[data-shape="hex"] .studio-node-status {
+  -webkit-line-clamp: 1;
 }
 
 .node-handle {
@@ -1457,6 +1469,24 @@ body::before {
   border-color: rgba(72, 231, 255, 0.58);
   color: #66ffd1;
   box-shadow: 0 0 12px rgba(72, 231, 255, 0.24);
+}
+
+.studio-node-play {
+  max-width: 112px;
+  min-height: 32px;
+  padding: 6px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #061421;
+  background: linear-gradient(135deg, #e9fbff, #c4f7ff);
+  border-color: rgba(72, 231, 255, 0.5);
+  box-shadow: 0 0 14px rgba(72, 231, 255, 0.22);
+}
+
+.studio-node[data-shape="diamond"] .studio-node-play,
+.studio-node[data-shape="hex"] .studio-node-play {
+  max-width: 102px;
 }
 
 .studio-preview-body,
@@ -1516,6 +1546,143 @@ body::before {
 .studio-ai-dock .quiz-textarea {
   width: 100%;
   min-width: 0 !important;
+}
+
+.studio-ai-dock,
+.quiz-player,
+.quiz-question,
+.quiz-question-body,
+.quiz-status,
+.muted-text {
+  color: #e8f7ff;
+}
+
+.quiz-player-head h3,
+.quiz-question-title {
+  color: #f5fcff;
+}
+
+.quiz-question {
+  background: rgba(5, 18, 38, 0.78);
+  border-color: rgba(72, 231, 255, 0.24);
+}
+
+.quiz-textarea,
+.quiz-text-input,
+.studio-form-row input,
+.studio-form-row select,
+.studio-form-row textarea {
+  color: #f3fbff;
+  background: rgba(3, 12, 28, 0.92);
+  border-color: rgba(72, 231, 255, 0.3);
+}
+
+.ai-bot-head {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.ai-bot-avatar {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(72, 231, 255, 0.92), rgba(102, 255, 209, 0.88));
+  box-shadow:
+    0 0 22px rgba(72, 231, 255, 0.3),
+    inset 0 -10px 20px rgba(3, 12, 28, 0.24);
+}
+
+.ai-bot-avatar::before {
+  content: "";
+  position: absolute;
+  inset: 9px 8px 14px;
+  border-radius: 10px;
+  background: rgba(3, 12, 28, 0.9);
+  border: 1px solid rgba(222, 252, 255, 0.35);
+}
+
+.ai-bot-eye {
+  position: absolute;
+  z-index: 1;
+  top: 20px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #66ffd1;
+  box-shadow: 0 0 10px rgba(102, 255, 209, 0.9);
+}
+
+.ai-bot-eye.left {
+  left: 17px;
+}
+
+.ai-bot-eye.right {
+  right: 17px;
+}
+
+.ai-bot-mouth {
+  position: absolute;
+  z-index: 1;
+  left: 19px;
+  bottom: 18px;
+  width: 14px;
+  height: 3px;
+  border-radius: 999px;
+  background: #d7fbff;
+  box-shadow: 0 0 8px rgba(215, 251, 255, 0.8);
+}
+
+.ai-bot-antenna {
+  position: absolute;
+  left: 25px;
+  top: -9px;
+  width: 2px;
+  height: 10px;
+  background: #66ffd1;
+  box-shadow: 0 0 8px rgba(102, 255, 209, 0.8);
+}
+
+.ai-bot-antenna::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #48e7ff;
+}
+
+.ai-bot-head.is-speaking .ai-bot-mouth {
+  animation: ai-mouth-talk 0.34s infinite ease-in-out;
+}
+
+.ai-bot-head.is-speaking .ai-bot-avatar {
+  animation: ai-bot-pulse 1s infinite ease-in-out;
+}
+
+@keyframes ai-mouth-talk {
+  0%, 100% {
+    height: 3px;
+    bottom: 18px;
+  }
+  50% {
+    height: 10px;
+    bottom: 14px;
+  }
+}
+
+@keyframes ai-bot-pulse {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
 }
 
 @media (max-width: 980px) {
