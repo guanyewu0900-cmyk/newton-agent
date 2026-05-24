@@ -67,10 +67,13 @@ if (-not $SkipCommit) {
 if (-not $NoPull) {
   Write-Host "Checking remote branch before push..."
   & git ls-remote --exit-code --heads origin $branch *> $null
-  if ($LASTEXITCODE -eq 0) {
+  $remoteCheck = $LASTEXITCODE
+  if ($remoteCheck -eq 0) {
     Run-Git pull --rebase origin $branch
-  } else {
+  } elseif ($remoteCheck -eq 2) {
     Write-Host "Remote branch origin/$branch does not exist yet. Skipping pull."
+  } else {
+    throw "Could not check origin/$branch. Please verify your GitHub login, network, or proxy settings."
   }
 }
 
