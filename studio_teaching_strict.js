@@ -1,5 +1,5 @@
 ﻿const NODE_WIDTH = 260;
-const NODE_HEIGHT = 168;
+const NODE_HEIGHT = 236;
 const GRID_OFFSET = 12;
 const GRID_SIZE = 24;
 const LOCAL_STATE_KEY = "phycs_teacher_workspace_v2";
@@ -44,6 +44,21 @@ const SHAPE_OPTIONS = ["rounded", "circle", "diamond", "hex"];
 const AI_MODEL_OPTIONS = [
   { value: "deepseek-chat", label: "DeepSeek Chat", hint: "Fast Q&A and teaching explanations" },
   { value: "deepseek-reasoner", label: "DeepSeek Reasoner", hint: "Stronger reasoning for step-by-step problem analysis" },
+];
+const DEMO_WORKFLOW_LAYOUT = {
+  2301: { positionX: 48, positionY: 70, shape: "rounded" },
+  2302: { positionX: 274, positionY: 350, shape: "circle" },
+  2303: { positionX: 500, positionY: 70, shape: "rounded" },
+  2304: { positionX: 726, positionY: 350, shape: "circle" },
+  2305: { positionX: 952, positionY: 70, shape: "rounded" },
+  2306: { positionX: 1178, positionY: 350, shape: "circle" },
+};
+const DEMO_WORKFLOW_CONNECTIONS = [
+  { fromModuleId: 2301, toModuleId: 2302 },
+  { fromModuleId: 2302, toModuleId: 2303 },
+  { fromModuleId: 2303, toModuleId: 2304 },
+  { fromModuleId: 2304, toModuleId: 2305 },
+  { fromModuleId: 2305, toModuleId: 2306 },
 ];
 
 const PDFJS_SCRIPT_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
@@ -276,6 +291,20 @@ function normalizeProject(raw, index = 0) {
   };
 }
 
+function applyDemoWorkflowLayout(project) {
+  const requiredIds = Object.keys(DEMO_WORKFLOW_LAYOUT).map(Number);
+  if (!project?.modules || !requiredIds.every((id) => project.modules.some((m) => m.id === id))) return false;
+  project.modules.forEach((m) => {
+    const layout = DEMO_WORKFLOW_LAYOUT[m.id];
+    if (!layout) return;
+    m.positionX = layout.positionX;
+    m.positionY = layout.positionY;
+    m.shape = layout.shape;
+  });
+  project.connections = DEMO_WORKFLOW_CONNECTIONS.map((c) => ({ ...c }));
+  return true;
+}
+
 function normalizeSnapshotModule(raw, fallbackId, index = 0) {
   const contentType = CONTENT_OPTIONS.some((x) => x.key === raw?.contentType) ? raw.contentType : "decision";
   const compileDefault = contentType === "ai_assistant"
@@ -342,6 +371,7 @@ function normalizeSnapshot(raw, index = 0) {
 function applyBootstrapData(payload) {
   const projects = (Array.isArray(payload?.projects) ? payload.projects : []).map((p, i) => normalizeProject(p, i));
   if (!projects.length) return false;
+  projects.forEach(applyDemoWorkflowLayout);
 
   const publishedList = (Array.isArray(payload?.published) ? payload.published : []).map((s, i) => normalizeSnapshot(s, i));
   const publishedMap = new Map();
@@ -637,9 +667,9 @@ function center(p, moduleId, side) {
   const m = moduleById(p, moduleId);
   if (!m) return null;
   const size = {
-    circle: { w: 210, h: 210 },
-    diamond: { w: 260, h: 190 },
-    hex: { w: 260, h: 178 },
+    circle: { w: 260, h: 260 },
+    diamond: { w: 260, h: 236 },
+    hex: { w: 260, h: 236 },
   }[m.shape] || { w: NODE_WIDTH, h: NODE_HEIGHT };
   const w = size.w;
   const h = size.h;
@@ -1722,7 +1752,7 @@ async function init() {
       color: dom.moduleColorSelect.value,
       shape: dom.moduleShapeSelect.value,
       positionX: GRID_OFFSET + (idx % 5) * 300,
-      positionY: GRID_OFFSET + Math.floor(idx / 5) * 220,
+      positionY: GRID_OFFSET + Math.floor(idx / 5) * 292,
       file: null,
       compile: type === "ai_assistant"
         ? { ready: false, summary: "AI Assistant not configured", data: { type: "ai_assistant", aiConfig: emptyAiConfig() } }

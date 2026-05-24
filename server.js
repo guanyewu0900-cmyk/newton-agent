@@ -216,7 +216,7 @@ function buildDemoBootstrap() {
       color: "#5f8dff",
       shape: "rounded",
       positionX: 48,
-      positionY: 84,
+      positionY: 70,
       compile: { ready: true, summary: `Compiled: ${path.basename(introPath)} (about ${introPages} pages)`, data: { type: "ppt", src: introPath, pages: introPages } }
     },
     {
@@ -225,8 +225,8 @@ function buildDemoBootstrap() {
       contentType: "ai_assistant",
       color: "#20d6bf",
       shape: "circle",
-      positionX: 330,
-      positionY: 84,
+      positionX: 274,
+      positionY: 350,
       compile: { ready: true, summary: "AI Assistant configured", data: { type: "ai_assistant", aiConfig: { model: "deepseek-chat", systemPrompt: promptConcept, knowledge: "Topic: Newton's First Law, inertia, balanced forces, net force, and motion states. Answer questions using the classroom introduction content." } } }
     },
     {
@@ -235,8 +235,8 @@ function buildDemoBootstrap() {
       contentType: "interactive",
       color: "#f7b84b",
       shape: "rounded",
-      positionX: 612,
-      positionY: 84,
+      positionX: 500,
+      positionY: 70,
       compile: { ready: true, summary: `Compiled: ${path.basename(interactivePath)}`, data: { type: "interactive", src: interactivePath } }
     },
     {
@@ -244,9 +244,9 @@ function buildDemoBootstrap() {
       moduleName: "Experiment Inquiry Guide",
       contentType: "ai_assistant",
       color: "#a782ff",
-      shape: "diamond",
-      positionX: 892,
-      positionY: 84,
+      shape: "circle",
+      positionX: 726,
+      positionY: 350,
       compile: { ready: true, summary: "AI Assistant configured", data: { type: "ai_assistant", aiConfig: { model: "deepseek-chat", systemPrompt: promptGuide, knowledge: `Source: student question FAQ knowledge base\n\n${faqKnowledge}` } } }
     },
     {
@@ -255,8 +255,8 @@ function buildDemoBootstrap() {
       contentType: "ppt",
       color: "#6ed68b",
       shape: "rounded",
-      positionX: 1174,
-      positionY: 84,
+      positionX: 952,
+      positionY: 70,
       compile: { ready: true, summary: `Compiled: ${path.basename(summaryPath)} (about ${summaryPages} pages)`, data: { type: "ppt", src: summaryPath, pages: summaryPages } }
     },
     {
@@ -264,9 +264,9 @@ function buildDemoBootstrap() {
       moduleName: "Experiment Analysis Assistant",
       contentType: "ai_assistant",
       color: "#f86e9f",
-      shape: "hex",
-      positionX: 1454,
-      positionY: 84,
+      shape: "circle",
+      positionX: 1178,
+      positionY: 350,
       compile: { ready: true, summary: "AI Assistant configured", data: { type: "ai_assistant", aiConfig: { model: "deepseek-reasoner", systemPrompt: promptAnalysis, knowledge: "Use this lesson's experiment and summary PPT to focus on error sources, improvement plans, and clear conclusion writing." } } }
     }
   ];

@@ -54,10 +54,14 @@
         grid-template-columns: 320px minmax(0, 1fr);
       }
       .teaching-demo-card {
-        border: 1px solid rgba(124, 153, 204, 0.24);
+        border: 1px solid rgba(72, 231, 255, 0.28);
         border-radius: 14px;
-        background: rgba(255, 255, 255, 0.94);
-        box-shadow: 0 14px 34px rgba(41, 66, 109, 0.1);
+        background:
+          linear-gradient(180deg, rgba(9, 21, 42, 0.98), rgba(3, 9, 22, 0.99));
+        box-shadow:
+          0 18px 46px rgba(0, 0, 0, 0.38),
+          inset 0 0 28px rgba(72, 231, 255, 0.08);
+        color: #edfaff;
         padding: 14px;
       }
       .teaching-demo-list {
@@ -66,18 +70,20 @@
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       }
       .teaching-demo-item {
-        border: 1px solid rgba(124, 153, 204, 0.24);
+        border: 1px solid rgba(72, 231, 255, 0.26);
         border-radius: 12px;
-        background: linear-gradient(180deg, #ffffff, #f8fbff);
+        background:
+          linear-gradient(180deg, rgba(7, 20, 42, 0.98), rgba(3, 10, 24, 0.99));
+        color: #edfaff;
         padding: 10px;
         display: grid;
         gap: 6px;
       }
       .teaching-demo-player {
-        border: 1px solid rgba(124, 153, 204, 0.24);
+        border: 1px solid rgba(72, 231, 255, 0.26);
         border-radius: 12px;
         min-height: 360px;
-        background: rgba(248, 251, 255, 0.96);
+        background: rgba(2, 7, 18, 0.98);
         overflow: hidden;
         position: relative;
       }
@@ -121,7 +127,7 @@
       }
       .teaching-demo-empty {
         min-height: 300px;
-        color: #60718f;
+        color: #c8eaff;
         display: grid;
         place-items: center;
         text-align: center;
@@ -135,10 +141,14 @@
         margin-top: 10px;
       }
       .studio-side-card {
-        border: 1px solid rgba(124, 153, 204, 0.24);
+        border: 1px solid rgba(72, 231, 255, 0.28);
         border-radius: 16px;
-        background: rgba(255, 255, 255, 0.94);
-        box-shadow: 0 10px 26px rgba(41, 66, 109, 0.08);
+        background:
+          linear-gradient(180deg, rgba(9, 21, 42, 0.98), rgba(3, 9, 22, 0.99));
+        box-shadow:
+          0 18px 46px rgba(0, 0, 0, 0.34),
+          inset 0 0 28px rgba(72, 231, 255, 0.08);
+        color: #edfaff;
         padding: 12px;
       }
       .studio-side-head {
@@ -152,7 +162,7 @@
       }
       body.teaching-fullscreen-mode {
         overflow: hidden;
-        background: #ffffff;
+        background: #030916;
       }
       body.teaching-fullscreen-mode .demo-topbar {
         display: none;
@@ -163,7 +173,7 @@
         inset: 0;
         z-index: 3500;
         padding: 0;
-        background: #ffffff;
+        background: #030916;
       }
       body.teaching-fullscreen-mode #teachingDemoSection .teaching-demo-shell {
         max-width: none;
@@ -195,6 +205,7 @@
       }
       body.teaching-playback-mode #teachingDemoSection.active {
         padding: 0;
+        background: #030916;
       }
       body.teaching-playback-mode #teachingDemoSection.active .teaching-demo-shell {
         grid-template-columns: 1fr;
@@ -213,6 +224,7 @@
         box-shadow: none;
         padding: 14px 18px 12px;
         min-height: 100vh;
+        background: #030916;
         display: grid;
         grid-template-rows: auto 1fr auto;
       }
