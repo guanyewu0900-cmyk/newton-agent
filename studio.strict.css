@@ -1300,3 +1300,227 @@ label[for="accessCodeInput"] {
     grid-template-columns: 1fr;
   }
 }
+/* Sci-fi deployment theme overrides */
+body {
+  color: #eaf6ff;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(0, 214, 255, 0.2), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(102, 255, 209, 0.14), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(255, 184, 77, 0.12), transparent 30%),
+    linear-gradient(135deg, #040711 0%, #091223 42%, #050915 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 214, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 214, 255, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent 78%);
+}
+
+.studio-sidebar,
+.studio-main,
+.studio-side-card,
+.teaching-demo-card,
+.studio-modal-card {
+  border-color: rgba(71, 217, 255, 0.26);
+  background:
+    linear-gradient(180deg, rgba(12, 24, 48, 0.88), rgba(5, 10, 24, 0.94));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.42),
+    0 0 34px rgba(0, 214, 255, 0.08) inset;
+}
+
+.studio-toolbar,
+.ppt-pdf-toolbar {
+  border-color: rgba(71, 217, 255, 0.22);
+  background: linear-gradient(90deg, rgba(6, 14, 32, 0.96), rgba(8, 28, 44, 0.92));
+}
+
+.studio-project-name,
+.studio-modal-title,
+.section-title,
+.studio-side-title {
+  color: #f2fbff;
+  text-shadow: 0 0 16px rgba(0, 214, 255, 0.26);
+}
+
+.ghost-btn,
+.primary-btn,
+.danger-btn,
+.studio-node-play {
+  border-radius: 8px;
+  letter-spacing: 0;
+}
+
+.ghost-btn {
+  color: #dff7ff;
+  background: rgba(8, 18, 38, 0.72);
+  border-color: rgba(92, 225, 255, 0.26);
+}
+
+.primary-btn {
+  color: #021019;
+  background: linear-gradient(135deg, #48e7ff, #66ffd1);
+  box-shadow: 0 0 18px rgba(72, 231, 255, 0.2);
+}
+
+.studio-canvas-wrap,
+.studio-module-canvas {
+  background:
+    radial-gradient(circle at 24% 12%, rgba(72, 231, 255, 0.13), transparent 24%),
+    linear-gradient(rgba(72, 231, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(72, 231, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(3, 8, 22, 0.98), rgba(3, 12, 26, 0.98));
+  background-size: auto, 24px 24px, 24px 24px, auto;
+  background-position: center, 12px 12px, 12px 12px, center;
+}
+
+.studio-node {
+  height: 124px;
+  min-height: 124px;
+  padding: 12px 14px;
+  gap: 5px;
+  contain: layout paint;
+}
+
+.studio-node::before {
+  background:
+    linear-gradient(180deg, rgba(8, 26, 48, 0.96), rgba(4, 10, 24, 0.98));
+  box-shadow:
+    0 16px 28px rgba(0, 0, 0, 0.38),
+    0 0 22px rgba(72, 231, 255, 0.12) inset,
+    0 0 18px rgba(72, 231, 255, 0.08);
+}
+
+.studio-node-head {
+  min-height: 20px;
+  overflow: hidden;
+}
+
+.studio-node-title,
+.studio-node-sub,
+.studio-node-status {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.studio-node-title {
+  -webkit-line-clamp: 2;
+  max-height: 38px;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.studio-node-sub {
+  -webkit-line-clamp: 1;
+  max-height: 18px;
+}
+
+.studio-node-status {
+  -webkit-line-clamp: 2;
+  max-height: 34px;
+  margin-top: 4px;
+}
+
+.studio-node[data-shape="circle"] {
+  height: 180px;
+  min-height: 180px;
+}
+
+.studio-node[data-shape="diamond"],
+.studio-node[data-shape="hex"] {
+  height: 132px;
+  min-height: 132px;
+}
+
+.studio-node[data-shape="diamond"] .studio-node-title,
+.studio-node[data-shape="diamond"] .studio-node-sub,
+.studio-node[data-shape="diamond"] .studio-node-status,
+.studio-node[data-shape="hex"] .studio-node-title,
+.studio-node[data-shape="hex"] .studio-node-sub,
+.studio-node[data-shape="hex"] .studio-node-status {
+  max-width: 122px;
+}
+
+.node-handle {
+  background: rgba(3, 12, 28, 0.96);
+  border-color: rgba(72, 231, 255, 0.58);
+  color: #66ffd1;
+  box-shadow: 0 0 12px rgba(72, 231, 255, 0.24);
+}
+
+.studio-preview-body,
+.teaching-demo-player {
+  border-color: rgba(72, 231, 255, 0.24);
+  background: rgba(2, 7, 18, 0.96);
+  box-shadow: 0 0 32px rgba(0, 214, 255, 0.08) inset;
+}
+
+.studio-step-layout {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 12px;
+  padding: 12px;
+}
+
+.studio-step-main,
+.studio-ai-dock {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(72, 231, 255, 0.18);
+  background: rgba(4, 12, 28, 0.78);
+}
+
+.studio-step-main {
+  display: grid;
+  place-items: center;
+}
+
+.studio-ai-dock {
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(102, 255, 209, 0.08) inset;
+}
+
+.studio-ai-dock .quiz-player {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  background: transparent;
+  border: 0;
+}
+
+.studio-ai-dock .quiz-form {
+  min-height: 0;
+  overflow: auto;
+}
+
+.studio-ai-dock .quiz-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.studio-ai-dock .quiz-textarea {
+  width: 100%;
+  min-width: 0 !important;
+}
+
+@media (max-width: 980px) {
+  .studio-step-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(360px, 1fr) minmax(260px, 34vh);
+  }
+}

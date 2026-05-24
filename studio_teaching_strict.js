@@ -576,6 +576,50 @@ function nextIds(snapshot, moduleId) {
   return i >= 0 && i < snapshot.sequence.length - 1 ? [snapshot.sequence[i + 1]] : [];
 }
 
+function playableModuleIds(snapshot) {
+  return (snapshot?.sequence || []).filter((id) => {
+    const m = snapshot.modules.find((x) => x.id === Number(id));
+    return m && m.contentType !== "ai_assistant";
+  });
+}
+
+function nextPlayableIds(snapshot, moduleId) {
+  const out = [];
+  nextIds(snapshot, moduleId).forEach((id) => {
+    const m = snapshot.modules.find((x) => x.id === Number(id));
+    if (!m) return;
+    if (m.contentType === "ai_assistant") {
+      nextIds(snapshot, m.id).forEach((nextId) => {
+        const next = snapshot.modules.find((x) => x.id === Number(nextId));
+        if (next && next.contentType !== "ai_assistant") out.push(next.id);
+      });
+    } else {
+      out.push(m.id);
+    }
+  });
+  return [...new Set(out)];
+}
+
+function attachedAiModule(snapshot, moduleId) {
+  const direct = nextIds(snapshot, moduleId)
+    .map((id) => snapshot.modules.find((x) => x.id === Number(id)))
+    .filter(Boolean);
+  return direct.find((m) => m.contentType === "ai_assistant") || null;
+}
+
+function ownerModuleForAi(snapshot, aiModuleId) {
+  const directOwner = (snapshot.modules || []).find((m) =>
+    m.contentType !== "ai_assistant"
+    && nextIds(snapshot, m.id).some((id) => Number(id) === Number(aiModuleId)));
+  if (directOwner) return directOwner;
+  const idx = snapshot.sequence.indexOf(Number(aiModuleId));
+  for (let i = idx - 1; i >= 0; i -= 1) {
+    const m = snapshot.modules.find((x) => x.id === Number(snapshot.sequence[i]));
+    if (m && m.contentType !== "ai_assistant") return m;
+  }
+  return null;
+}
+
 function updateCanvasSize(p) {
   let w = 1400;
   let h = 800;
@@ -808,7 +852,7 @@ function renderCanvas() {
       <div class="studio-node-head"><div class="studio-node-title">${escapeHtml(m.moduleName)}</div><div class="studio-node-dot" style="background:${m.color}"></div></div>
       <div class="studio-node-sub">${escapeHtml(contentLabel(m.contentType))}</div>
       <div class="studio-node-status ${ready?"ready":"pending"}">${escapeHtml(status)}</div>
-      <button class="studio-node-play" type="button">Play</button>
+      <button class="studio-node-play" type="button">${m.contentType === "ai_assistant" ? "Open Chat" : "Play"}</button>
       <button class="node-handle left" type="button">+</button>
       <button class="node-handle right" type="button">+</button>
     `;
@@ -1077,7 +1121,7 @@ function snapshotOf(project, meta) {
   };
 }
 
-function firstId(snapshot) { return snapshot.sequence[0] || snapshot.modules[0]?.id || null; }
+function firstId(snapshot) { return playableModuleIds(snapshot)[0] || snapshot.sequence[0] || snapshot.modules[0]?.id || null; }
 
 function renderQuiz(container, module, answersBag, resultBag, key) {
   const quiz = module.compile?.data?.quiz;
@@ -1346,12 +1390,9 @@ async function sendAiQuestion(mode, moduleId) {
     mode === "preview" ? renderPreview() : renderTeaching();
   }
 }
-function renderStep(container, snapshot, moduleId, mode) {
-  const m = snapshot.modules.find((x) => x.id === Number(moduleId));
-  if (!m) { container.innerHTML = '<div class="studio-preview-empty">Module not found</div>'; return { info: "", decision: false, hasNext: false }; }
-  const nxt = nextIds(snapshot, m.id);
-  const info = `${m.moduleName} · ${contentLabel(m.contentType)}`;
+function renderStepContent(container, snapshot, m, mode, nxt, info) {
   const pages = mode === "preview" ? state.preview.pages : state.teaching.pages;
+  const hasNext = Boolean(nxt.length);
   if (m.contentType === "ppt") {
     const srcBase = String(m.compile?.data?.src || "");
     const max = getKnownPdfPageCount(srcBase, Number(m.compile?.data?.pages || 1));
@@ -1368,39 +1409,55 @@ function renderStep(container, snapshot, moduleId, mode) {
       const player = container.querySelector(".ppt-pdf-player");
       renderPdfPageCanvas(player, srcBase, page, max);
     }
-    return { info: `${info} · Page ${page}/${max}`, decision: false, hasNext: Boolean(nxt.length) };
+    return { info: `${info} · Page ${page}/${max}`, decision: false, hasNext };
   }
   if (m.contentType === "video") {
     container.innerHTML = `<video class="module-video-player" controls preload="metadata" src="${escapeHtml(m.compile?.data?.src || "")}"></video>`;
-    return { info, decision: false, hasNext: Boolean(nxt.length) };
+    return { info, decision: false, hasNext };
   }
   if (m.contentType === "interactive") {
     container.innerHTML = `<iframe src="${escapeHtml(m.compile?.data?.src || "")}" title="Interactive Activity"></iframe>`;
-    return { info, decision: false, hasNext: Boolean(nxt.length) };
+    return { info, decision: false, hasNext };
   }
   if (m.contentType === "quiz") {
     const a = mode === "preview" ? state.preview.answers : state.teaching.answers;
     const r = mode === "preview" ? state.preview.results : state.teaching.results;
     renderQuiz(container, m, a, r, mode);
-    return { info, decision: false, hasNext: Boolean(nxt.length) };
+    return { info, decision: false, hasNext };
   }
   if (m.contentType === "ai_assistant") {
     renderAiAssistantPlayer(container, m, mode);
-    return { info: `${info} · AI Chat`, decision: false, hasNext: Boolean(nxt.length) };
+    return { info: `${info} · AI Chat`, decision: false, hasNext };
   }
   if (m.contentType === "decision") {
     const opts = nxt.map((id) => snapshot.modules.find((x) => x.id === id)).filter(Boolean).map((x) => `<button class="primary-btn" type="button" data-step="${mode}-branch" data-target="${x.id}">${escapeHtml(x.moduleName)}</button>`).join("");
     container.innerHTML = `<section class="studio-branch-picker"><div class="studio-branch-title">Choose the next branch</div><div class="studio-branch-list">${opts || '<div class="muted-text">No branches configured</div>'}</div></section>`;
-    return { info: `${info} · Branch Selection`, decision: true, hasNext: Boolean(nxt.length) };
+    return { info: `${info} · Branch Selection`, decision: true, hasNext };
   }
   container.innerHTML = `<div class="studio-preview-empty">${m.contentType === "merge" ? "Merge module: continue to the shared next step" : "This type is not supported yet"}</div>`;
-  return { info, decision: false, hasNext: Boolean(nxt.length) };
+  return { info, decision: false, hasNext };
+}
+
+function renderStep(container, snapshot, moduleId, mode) {
+  const m = snapshot.modules.find((x) => x.id === Number(moduleId));
+  if (!m) { container.innerHTML = '<div class="studio-preview-empty">Module not found</div>'; return { info: "", decision: false, hasNext: false }; }
+  const nxt = nextPlayableIds(snapshot, m.id);
+  const info = `${m.moduleName} · ${contentLabel(m.contentType)}`;
+  const ai = m.contentType === "ai_assistant" ? null : attachedAiModule(snapshot, m.id);
+  if (!ai) return renderStepContent(container, snapshot, m, mode, nxt, info);
+
+  container.innerHTML = `<div class="studio-step-layout"><div class="studio-step-main"></div><aside class="studio-ai-dock"></aside></div>`;
+  const main = container.querySelector(".studio-step-main");
+  const dock = container.querySelector(".studio-ai-dock");
+  const result = renderStepContent(main, snapshot, m, mode, nxt, info);
+  renderAiAssistantPlayer(dock, ai, mode);
+  return { ...result, info: `${result.info} · AI Chat` };
 }
 
 function movePreview(targetId = null) {
   const s = state.preview.snapshot; if (!s) return;
   const cur = s.sequence[state.preview.index];
-  const nxt = nextIds(s, cur); if (!nxt.length) return;
+  const nxt = nextPlayableIds(s, cur); if (!nxt.length) return;
   const id = Number(targetId || nxt[0]);
   const idx = s.sequence.indexOf(id); if (idx < 0) return;
   state.preview.index = idx; renderPreview();
@@ -1411,8 +1468,10 @@ function renderPreview() {
   const s = state.preview.snapshot; if (!s) return;
   const id = s.sequence[state.preview.index];
   const r = renderStep(dom.previewBody, s, id, "preview");
-  dom.previewStepInfo.textContent = `${r.info} · ${state.preview.index + 1}/${s.sequence.length}`;
-  dom.previewPrevBtn.disabled = state.preview.index <= 0;
+  const playable = playableModuleIds(s);
+  const playableIndex = Math.max(0, playable.indexOf(Number(id)));
+  dom.previewStepInfo.textContent = `${r.info} · ${playableIndex + 1}/${Math.max(1, playable.length)}`;
+  dom.previewPrevBtn.disabled = playableIndex <= 0;
   dom.previewNextBtn.disabled = r.decision || !r.hasNext;
   if (dom.previewAutoPlayToggle.checked && !r.decision && r.hasNext) {
     state.preview.timer = setTimeout(() => movePreview(), clampSec(dom.previewAutoPlaySeconds.value, 12) * 1000);
@@ -1424,7 +1483,11 @@ function openPreview(startId = null) {
   if (!p?.modules?.length) return alert("The current project has no modules");
   state.preview.snapshot = snapshotOf(p, { publishId: 0, name: p.name, description: p.description, publishedAt: now(), autoPlay: false, autoPlaySeconds: 12 });
   state.preview.answers = {}; state.preview.results = {}; state.preview.pages = {}; state.preview.aiChats = {};
-  const id = Number(startId || firstId(state.preview.snapshot));
+  let id = Number(startId || firstId(state.preview.snapshot));
+  const startModule = state.preview.snapshot.modules.find((x) => x.id === id);
+  if (startModule?.contentType === "ai_assistant") {
+    id = ownerModuleForAi(state.preview.snapshot, startModule.id)?.id || firstId(state.preview.snapshot);
+  }
   const i = state.preview.snapshot.sequence.indexOf(id);
   state.preview.index = i >= 0 ? i : 0;
   dom.previewProjectTitle.textContent = `${p.name} (Preview)`;
@@ -1482,7 +1545,7 @@ function changePptPage(mode, delta) {
 
 function moveTeaching(targetId = null) {
   const s = state.teaching.snapshot; if (!s || !state.teaching.currentId) return;
-  const nxt = nextIds(s, state.teaching.currentId); if (!nxt.length) return;
+  const nxt = nextPlayableIds(s, state.teaching.currentId); if (!nxt.length) return;
   const id = Number(targetId || nxt[0]);
   state.teaching.currentId = id; state.teaching.history.push(id); renderTeaching();
 }
@@ -1506,7 +1569,7 @@ async function init() {
   if (!canInit) return;
   clearLegacyLocalStateKeys();
 
-  dom.userCard.innerHTML = '<img alt="avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2288%22 height=%2288%22%3E%3Crect width=%2288%22 height=%2288%22 rx=%2244%22 fill=%22%230e1e3f%22/%3E%3Ccircle cx=%2244%22 cy=%2232%22 r=%2215%22 fill=%22%237db8ff%22/%3E%3Cpath d=%22M15 71c6-13 16-21 29-21s23 8 29 21%22 fill=%22%237db8ff%22/%3E%3C/svg%3E"/><div><div class="studio-user-name">Mr. Liu</div><div class="studio-user-role">Physics Teaching Group</div></div>';
+  dom.userCard.innerHTML = '<img alt="avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2288%22 height=%2288%22%3E%3Crect width=%2288%22 height=%2288%22 rx=%2244%22 fill=%22%230e1e3f%22/%3E%3Ccircle cx=%2244%22 cy=%2232%22 r=%2215%22 fill=%22%237db8ff%22/%3E%3Cpath d=%22M15 71c6-13 16-21 29-21s23 8 29 21%22 fill=%22%237db8ff%22/%3E%3C/svg%3E"/><div><div class="studio-user-name">物理教师</div><div class="studio-user-role">Physics Teaching Group</div></div>';
   dom.moduleContentSelect.innerHTML = CONTENT_OPTIONS.map((o) => `<option value="${o.key}">${o.label}</option>`).join("");
   dom.moduleColorSelect.innerHTML = COLOR_OPTIONS.map((c) => `<option value="${c}">${c}</option>`).join("");
   dom.moduleShapeSelect.innerHTML = SHAPE_OPTIONS.map((s) => `<option value="${s}">${s}</option>`).join("");
@@ -1725,7 +1788,19 @@ async function init() {
       dom.previewModal.classList.add("hidden");
     }
   });
-  dom.previewPrevBtn.addEventListener("click", () => { if (state.preview.index > 0) { state.preview.index -= 1; renderPreview(); } });
+  dom.previewPrevBtn.addEventListener("click", () => {
+    const s = state.preview.snapshot;
+    if (!s) return;
+    const playable = playableModuleIds(s);
+    const cur = s.sequence[state.preview.index];
+    const i = playable.indexOf(Number(cur));
+    if (i <= 0) return;
+    const prevIndex = s.sequence.indexOf(playable[i - 1]);
+    if (prevIndex >= 0) {
+      state.preview.index = prevIndex;
+      renderPreview();
+    }
+  });
   dom.previewNextBtn.addEventListener("click", () => movePreview());
   dom.previewAutoPlayToggle.addEventListener("change", renderPreview);
   dom.previewAutoPlaySeconds.addEventListener("change", () => { dom.previewAutoPlaySeconds.value = String(clampSec(dom.previewAutoPlaySeconds.value, 12)); renderPreview(); });
@@ -2016,7 +2091,3 @@ async function init() {
 }
 
 init();
-
-
-
-
