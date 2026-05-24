@@ -1,6 +1,7 @@
 param(
   [string]$Message = "Update website",
-  [switch]$SkipCommit
+  [switch]$SkipCommit,
+  [switch]$NoPull
 )
 
 $ErrorActionPreference = "Stop"
@@ -56,6 +57,16 @@ if (-not $SkipCommit) {
     }
   } else {
     Write-Host "Working tree is clean. Nothing to commit."
+  }
+}
+
+if (-not $NoPull) {
+  Write-Host "Checking remote branch before push..."
+  & git ls-remote --exit-code --heads origin $branch *> $null
+  if ($LASTEXITCODE -eq 0) {
+    Run-Git pull --rebase origin $branch
+  } else {
+    Write-Host "Remote branch origin/$branch does not exist yet. Skipping pull."
   }
 }
 
