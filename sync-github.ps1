@@ -26,7 +26,11 @@ if (-not (Test-Path ".git")) {
   Run-Git branch -M main
 }
 
-Run-Git config --global --add safe.directory $SafeRoot
+Write-Host "+ git config --global --add safe.directory $SafeRoot" -ForegroundColor Cyan
+& git config --global --add safe.directory $SafeRoot
+if ($LASTEXITCODE -ne 0) {
+  Write-Host "Warning: could not update global safe.directory. Continuing because this repository is already accessible." -ForegroundColor Yellow
+}
 
 $branch = (& git branch --show-current).Trim()
 if (-not $branch) {
