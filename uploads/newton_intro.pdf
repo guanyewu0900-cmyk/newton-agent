@@ -12,95 +12,283 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 5 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
 endobj
 6 0 obj
-<< /Length 300 >>
+<< /Length 2984 >>
 stream
-BT
-/F1 28 Tf
-56 790 Td
-(Newton's First Law) Tj
-/F2 15 Tf
-0 -48 Td
-(Grade 8 Physics) Tj
-0 -24 Td
-(Topic: Motion and Force) Tj
-0 -24 Td
-(Guiding question:) Tj
-0 -24 Td
-(Does motion need a force to keep going?) Tj
-0 -24 Td
-(Today we compare observation, experiment, and ideal reasoning.) Tj
-0 -24 Td
-ET
+0.016 0.035 0.086 rg 0 0 960 540 re f
+0.024 0.082 0.165 rg 0 0 960 540 re f
+0.071 0.192 0.290 RG 0.6 w 0 0 m 0 540 l S
+0.071 0.192 0.290 RG 0.6 w 48 0 m 48 540 l S
+0.071 0.192 0.290 RG 0.6 w 96 0 m 96 540 l S
+0.071 0.192 0.290 RG 0.6 w 144 0 m 144 540 l S
+0.071 0.192 0.290 RG 0.6 w 192 0 m 192 540 l S
+0.071 0.192 0.290 RG 0.6 w 240 0 m 240 540 l S
+0.071 0.192 0.290 RG 0.6 w 288 0 m 288 540 l S
+0.071 0.192 0.290 RG 0.6 w 336 0 m 336 540 l S
+0.071 0.192 0.290 RG 0.6 w 384 0 m 384 540 l S
+0.071 0.192 0.290 RG 0.6 w 432 0 m 432 540 l S
+0.071 0.192 0.290 RG 0.6 w 480 0 m 480 540 l S
+0.071 0.192 0.290 RG 0.6 w 528 0 m 528 540 l S
+0.071 0.192 0.290 RG 0.6 w 576 0 m 576 540 l S
+0.071 0.192 0.290 RG 0.6 w 624 0 m 624 540 l S
+0.071 0.192 0.290 RG 0.6 w 672 0 m 672 540 l S
+0.071 0.192 0.290 RG 0.6 w 720 0 m 720 540 l S
+0.071 0.192 0.290 RG 0.6 w 768 0 m 768 540 l S
+0.071 0.192 0.290 RG 0.6 w 816 0 m 816 540 l S
+0.071 0.192 0.290 RG 0.6 w 864 0 m 864 540 l S
+0.071 0.192 0.290 RG 0.6 w 912 0 m 912 540 l S
+0.071 0.192 0.290 RG 0.6 w 960 0 m 960 540 l S
+0.071 0.192 0.290 RG 0.6 w 0 0 m 960 0 l S
+0.071 0.192 0.290 RG 0.6 w 0 48 m 960 48 l S
+0.071 0.192 0.290 RG 0.6 w 0 96 m 960 96 l S
+0.071 0.192 0.290 RG 0.6 w 0 144 m 960 144 l S
+0.071 0.192 0.290 RG 0.6 w 0 192 m 960 192 l S
+0.071 0.192 0.290 RG 0.6 w 0 240 m 960 240 l S
+0.071 0.192 0.290 RG 0.6 w 0 288 m 960 288 l S
+0.071 0.192 0.290 RG 0.6 w 0 336 m 960 336 l S
+0.071 0.192 0.290 RG 0.6 w 0 384 m 960 384 l S
+0.071 0.192 0.290 RG 0.6 w 0 432 m 960 432 l S
+0.071 0.192 0.290 RG 0.6 w 0 480 m 960 480 l S
+0.071 0.192 0.290 RG 0.6 w 0 528 m 960 528 l S
+0.027 0.114 0.208 rg 0 466 960 74 re f
+0.259 0.906 1.000 RG 2 w 0 466 m 960 466 l S
+BT 0.918 0.980 1.000 rg /F1 30 Tf 46 492 Td (Mission Brief: Newton's First Law) Tj ET
+BT 0.624 0.863 1.000 rg /F2 15 Tf 48 462 Td (Learning sheet for exploring motion and force) Tj ET
+0.027 0.078 0.157 rg 46 300 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 300 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 394 Td (Guiding Question) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 368 Td (- Does motion need a force to keep going?) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 344 Td (- What really makes moving objects slow down?) Tj ET
+0.027 0.078 0.157 rg 46 154 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 154 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 248 Td (Your Evidence Log) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 222 Td (- Record what changes when surfaces get smoother.) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 198 Td (- Use data before making conclusions.) Tj ET
+0.027 0.078 0.157 rg 500 92 390 334 re f
+0.224 0.875 1.000 RG 1.4 w 500 92 390 334 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 518 394 Td (Visual Model) Tj ET
+0.063 0.157 0.275 rg 610 258 110 56 re f
+0.259 0.906 1.000 RG 2 w 610 258 110 56 re S
+0.259 0.906 1.000 RG 2 w 644 306 42 18 re S
+0.608 0.718 0.843 RG 2 w 628 240 m 702 240 l S
+BT 0.812 0.937 1.000 rg /F2 14 Tf 628 210 Td (A push starts motion.) Tj ET
 endstream
 endobj
 7 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
 endobj
 8 0 obj
-<< /Length 292 >>
+<< /Length 3055 >>
 stream
-BT
-/F1 28 Tf
-56 790 Td
-(Everyday Observations) Tj
-/F2 15 Tf
-0 -48 Td
-(A suitcase slows down after a push.) Tj
-0 -24 Td
-(A skateboard speeds up down a ramp.) Tj
-0 -24 Td
-(A water drop falls toward Earth.) Tj
-0 -24 Td
-(These observations can mislead us if we ignore resistance.) Tj
-0 -24 Td
-ET
+0.016 0.035 0.086 rg 0 0 960 540 re f
+0.024 0.082 0.165 rg 0 0 960 540 re f
+0.071 0.192 0.290 RG 0.6 w 0 0 m 0 540 l S
+0.071 0.192 0.290 RG 0.6 w 48 0 m 48 540 l S
+0.071 0.192 0.290 RG 0.6 w 96 0 m 96 540 l S
+0.071 0.192 0.290 RG 0.6 w 144 0 m 144 540 l S
+0.071 0.192 0.290 RG 0.6 w 192 0 m 192 540 l S
+0.071 0.192 0.290 RG 0.6 w 240 0 m 240 540 l S
+0.071 0.192 0.290 RG 0.6 w 288 0 m 288 540 l S
+0.071 0.192 0.290 RG 0.6 w 336 0 m 336 540 l S
+0.071 0.192 0.290 RG 0.6 w 384 0 m 384 540 l S
+0.071 0.192 0.290 RG 0.6 w 432 0 m 432 540 l S
+0.071 0.192 0.290 RG 0.6 w 480 0 m 480 540 l S
+0.071 0.192 0.290 RG 0.6 w 528 0 m 528 540 l S
+0.071 0.192 0.290 RG 0.6 w 576 0 m 576 540 l S
+0.071 0.192 0.290 RG 0.6 w 624 0 m 624 540 l S
+0.071 0.192 0.290 RG 0.6 w 672 0 m 672 540 l S
+0.071 0.192 0.290 RG 0.6 w 720 0 m 720 540 l S
+0.071 0.192 0.290 RG 0.6 w 768 0 m 768 540 l S
+0.071 0.192 0.290 RG 0.6 w 816 0 m 816 540 l S
+0.071 0.192 0.290 RG 0.6 w 864 0 m 864 540 l S
+0.071 0.192 0.290 RG 0.6 w 912 0 m 912 540 l S
+0.071 0.192 0.290 RG 0.6 w 960 0 m 960 540 l S
+0.071 0.192 0.290 RG 0.6 w 0 0 m 960 0 l S
+0.071 0.192 0.290 RG 0.6 w 0 48 m 960 48 l S
+0.071 0.192 0.290 RG 0.6 w 0 96 m 960 96 l S
+0.071 0.192 0.290 RG 0.6 w 0 144 m 960 144 l S
+0.071 0.192 0.290 RG 0.6 w 0 192 m 960 192 l S
+0.071 0.192 0.290 RG 0.6 w 0 240 m 960 240 l S
+0.071 0.192 0.290 RG 0.6 w 0 288 m 960 288 l S
+0.071 0.192 0.290 RG 0.6 w 0 336 m 960 336 l S
+0.071 0.192 0.290 RG 0.6 w 0 384 m 960 384 l S
+0.071 0.192 0.290 RG 0.6 w 0 432 m 960 432 l S
+0.071 0.192 0.290 RG 0.6 w 0 480 m 960 480 l S
+0.071 0.192 0.290 RG 0.6 w 0 528 m 960 528 l S
+0.027 0.114 0.208 rg 0 466 960 74 re f
+0.259 0.906 1.000 RG 2 w 0 466 m 960 466 l S
+BT 0.918 0.980 1.000 rg /F1 30 Tf 46 492 Td (Observation Station) Tj ET
+BT 0.624 0.863 1.000 rg /F2 15 Tf 48 462 Td (Everyday motion can be misleading) Tj ET
+0.027 0.078 0.157 rg 46 300 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 300 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 394 Td (What You See) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 368 Td (- A suitcase slows after a push.) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 344 Td (- A skateboard speeds up on a ramp.) Tj ET
+0.027 0.078 0.157 rg 46 154 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 154 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 248 Td (What To Ask) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 222 Td (- Which force changes the motion?) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 198 Td (- Is the net force zero or nonzero?) Tj ET
+0.027 0.078 0.157 rg 500 92 390 334 re f
+0.224 0.875 1.000 RG 1.4 w 500 92 390 334 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 518 394 Td (Visual Model) Tj ET
+0.824 0.910 1.000 RG 4 w 560 262 m 830 262 l S
+1.000 0.545 0.420 rg 588 270 44 24 re f
+1.000 0.839 0.420 rg 686 270 44 24 re f
+0.400 1.000 0.820 rg 784 270 44 24 re f
+0.400 1.000 0.820 RG 2 w 610 316 m 812 316 l S
+0.400 1.000 0.820 RG 2 w 802 322 m 812 316 l S
+0.400 1.000 0.820 RG 2 w 802 310 m 812 316 l S
+BT 0.918 0.980 1.000 rg /F2 15 Tf 572 228 Td (Less resistance -> longer distance) Tj ET
 endstream
 endobj
 9 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
 endobj
 10 0 obj
-<< /Length 280 >>
+<< /Length 3057 >>
 stream
-BT
-/F1 28 Tf
-56 790 Td
-(From Aristotle to Galileo) Tj
-/F2 15 Tf
-0 -48 Td
-(Aristotle: force keeps objects moving.) Tj
-0 -24 Td
-(Galileo: smoother surfaces let objects travel farther.) Tj
-0 -24 Td
-(Ideal reasoning: without resistance, motion can continue uniformly.) Tj
-0 -24 Td
-ET
+0.016 0.035 0.086 rg 0 0 960 540 re f
+0.024 0.082 0.165 rg 0 0 960 540 re f
+0.071 0.192 0.290 RG 0.6 w 0 0 m 0 540 l S
+0.071 0.192 0.290 RG 0.6 w 48 0 m 48 540 l S
+0.071 0.192 0.290 RG 0.6 w 96 0 m 96 540 l S
+0.071 0.192 0.290 RG 0.6 w 144 0 m 144 540 l S
+0.071 0.192 0.290 RG 0.6 w 192 0 m 192 540 l S
+0.071 0.192 0.290 RG 0.6 w 240 0 m 240 540 l S
+0.071 0.192 0.290 RG 0.6 w 288 0 m 288 540 l S
+0.071 0.192 0.290 RG 0.6 w 336 0 m 336 540 l S
+0.071 0.192 0.290 RG 0.6 w 384 0 m 384 540 l S
+0.071 0.192 0.290 RG 0.6 w 432 0 m 432 540 l S
+0.071 0.192 0.290 RG 0.6 w 480 0 m 480 540 l S
+0.071 0.192 0.290 RG 0.6 w 528 0 m 528 540 l S
+0.071 0.192 0.290 RG 0.6 w 576 0 m 576 540 l S
+0.071 0.192 0.290 RG 0.6 w 624 0 m 624 540 l S
+0.071 0.192 0.290 RG 0.6 w 672 0 m 672 540 l S
+0.071 0.192 0.290 RG 0.6 w 720 0 m 720 540 l S
+0.071 0.192 0.290 RG 0.6 w 768 0 m 768 540 l S
+0.071 0.192 0.290 RG 0.6 w 816 0 m 816 540 l S
+0.071 0.192 0.290 RG 0.6 w 864 0 m 864 540 l S
+0.071 0.192 0.290 RG 0.6 w 912 0 m 912 540 l S
+0.071 0.192 0.290 RG 0.6 w 960 0 m 960 540 l S
+0.071 0.192 0.290 RG 0.6 w 0 0 m 960 0 l S
+0.071 0.192 0.290 RG 0.6 w 0 48 m 960 48 l S
+0.071 0.192 0.290 RG 0.6 w 0 96 m 960 96 l S
+0.071 0.192 0.290 RG 0.6 w 0 144 m 960 144 l S
+0.071 0.192 0.290 RG 0.6 w 0 192 m 960 192 l S
+0.071 0.192 0.290 RG 0.6 w 0 240 m 960 240 l S
+0.071 0.192 0.290 RG 0.6 w 0 288 m 960 288 l S
+0.071 0.192 0.290 RG 0.6 w 0 336 m 960 336 l S
+0.071 0.192 0.290 RG 0.6 w 0 384 m 960 384 l S
+0.071 0.192 0.290 RG 0.6 w 0 432 m 960 432 l S
+0.071 0.192 0.290 RG 0.6 w 0 480 m 960 480 l S
+0.071 0.192 0.290 RG 0.6 w 0 528 m 960 528 l S
+0.027 0.114 0.208 rg 0 466 960 74 re f
+0.259 0.906 1.000 RG 2 w 0 466 m 960 466 l S
+BT 0.918 0.980 1.000 rg /F1 30 Tf 46 492 Td (Galileo's Thought Experiment) Tj ET
+BT 0.624 0.863 1.000 rg /F2 15 Tf 48 462 Td (From real surfaces to ideal reasoning) Tj ET
+0.027 0.078 0.157 rg 46 300 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 300 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 394 Td (Experiment Path) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 368 Td (- Same release height on the left ramp.) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 344 Td (- Right ramp angle becomes smaller.) Tj ET
+0.027 0.078 0.157 rg 46 154 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 154 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 248 Td (Ideal Leap) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 222 Td (- If resistance is ignored, motion continues uniformly.) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 198 Td (- This is reasoning beyond direct observation.) Tj ET
+0.027 0.078 0.157 rg 500 92 390 334 re f
+0.224 0.875 1.000 RG 1.4 w 500 92 390 334 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 518 394 Td (Visual Model) Tj ET
+0.259 0.906 1.000 RG 4 w 520 230 m 700 325 l S
+1.000 0.812 0.420 RG 4 w 700 325 m 880 248 l S
+0.824 0.910 1.000 RG 2 w 520 230 m 880 230 l S
+0.400 1.000 0.820 rg 564 262 28 28 re f
+0.400 1.000 0.820 RG 2 w 738 300 m 865 300 l S
+BT 0.918 0.980 1.000 rg /F2 14 Tf 540 196 Td (As the right ramp becomes flatter, the travel distance grows.) Tj ET
 endstream
 endobj
 11 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
 endobj
 12 0 obj
-<< /Length 300 >>
+<< /Length 3715 >>
 stream
-BT
-/F1 28 Tf
-56 790 Td
-(Learning Tasks) Tj
-/F2 15 Tf
-0 -48 Td
-(1. Compare motion on rough and smooth surfaces.) Tj
-0 -24 Td
-(2. Use Galileo's ramp thought experiment.) Tj
-0 -24 Td
-(3. Observe an air-track slider with reduced friction.) Tj
-0 -24 Td
-(4. Explain results with net force.) Tj
-0 -24 Td
-ET
+0.016 0.035 0.086 rg 0 0 960 540 re f
+0.024 0.082 0.165 rg 0 0 960 540 re f
+0.071 0.192 0.290 RG 0.6 w 0 0 m 0 540 l S
+0.071 0.192 0.290 RG 0.6 w 48 0 m 48 540 l S
+0.071 0.192 0.290 RG 0.6 w 96 0 m 96 540 l S
+0.071 0.192 0.290 RG 0.6 w 144 0 m 144 540 l S
+0.071 0.192 0.290 RG 0.6 w 192 0 m 192 540 l S
+0.071 0.192 0.290 RG 0.6 w 240 0 m 240 540 l S
+0.071 0.192 0.290 RG 0.6 w 288 0 m 288 540 l S
+0.071 0.192 0.290 RG 0.6 w 336 0 m 336 540 l S
+0.071 0.192 0.290 RG 0.6 w 384 0 m 384 540 l S
+0.071 0.192 0.290 RG 0.6 w 432 0 m 432 540 l S
+0.071 0.192 0.290 RG 0.6 w 480 0 m 480 540 l S
+0.071 0.192 0.290 RG 0.6 w 528 0 m 528 540 l S
+0.071 0.192 0.290 RG 0.6 w 576 0 m 576 540 l S
+0.071 0.192 0.290 RG 0.6 w 624 0 m 624 540 l S
+0.071 0.192 0.290 RG 0.6 w 672 0 m 672 540 l S
+0.071 0.192 0.290 RG 0.6 w 720 0 m 720 540 l S
+0.071 0.192 0.290 RG 0.6 w 768 0 m 768 540 l S
+0.071 0.192 0.290 RG 0.6 w 816 0 m 816 540 l S
+0.071 0.192 0.290 RG 0.6 w 864 0 m 864 540 l S
+0.071 0.192 0.290 RG 0.6 w 912 0 m 912 540 l S
+0.071 0.192 0.290 RG 0.6 w 960 0 m 960 540 l S
+0.071 0.192 0.290 RG 0.6 w 0 0 m 960 0 l S
+0.071 0.192 0.290 RG 0.6 w 0 48 m 960 48 l S
+0.071 0.192 0.290 RG 0.6 w 0 96 m 960 96 l S
+0.071 0.192 0.290 RG 0.6 w 0 144 m 960 144 l S
+0.071 0.192 0.290 RG 0.6 w 0 192 m 960 192 l S
+0.071 0.192 0.290 RG 0.6 w 0 240 m 960 240 l S
+0.071 0.192 0.290 RG 0.6 w 0 288 m 960 288 l S
+0.071 0.192 0.290 RG 0.6 w 0 336 m 960 336 l S
+0.071 0.192 0.290 RG 0.6 w 0 384 m 960 384 l S
+0.071 0.192 0.290 RG 0.6 w 0 432 m 960 432 l S
+0.071 0.192 0.290 RG 0.6 w 0 480 m 960 480 l S
+0.071 0.192 0.290 RG 0.6 w 0 528 m 960 528 l S
+0.027 0.114 0.208 rg 0 466 960 74 re f
+0.259 0.906 1.000 RG 2 w 0 466 m 960 466 l S
+BT 0.918 0.980 1.000 rg /F1 30 Tf 46 492 Td (Lab Tasks) Tj ET
+BT 0.624 0.863 1.000 rg /F2 15 Tf 48 462 Td (Use the simulation as a science notebook) Tj ET
+0.027 0.078 0.157 rg 46 300 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 300 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 394 Td (Run Three Tests) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 368 Td (- Rough surface, smooth surface, air track.) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 344 Td (- Compare distance and velocity graphs.) Tj ET
+0.027 0.078 0.157 rg 46 154 390 126 re f
+0.224 0.875 1.000 RG 1.4 w 46 154 390 126 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 64 248 Td (Explain With Physics) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 222 Td (- Balanced forces keep motion unchanged.) Tj ET
+BT 0.918 0.980 1.000 rg /F2 14 Tf 66 198 Td (- Nonzero net force changes motion.) Tj ET
+0.027 0.078 0.157 rg 500 92 390 334 re f
+0.224 0.875 1.000 RG 1.4 w 500 92 390 334 re S
+BT 0.400 1.000 0.820 rg /F1 15 Tf 518 394 Td (Visual Model) Tj ET
+0.063 0.157 0.275 rg 520 250 360 34 re f
+0.259 0.906 1.000 RG 2 w 520 250 360 34 re S
+0.137 0.294 0.408 RG 1 w 538 258 m 538 278 l S
+0.137 0.294 0.408 RG 1 w 558 258 m 558 278 l S
+0.137 0.294 0.408 RG 1 w 578 258 m 578 278 l S
+0.137 0.294 0.408 RG 1 w 598 258 m 598 278 l S
+0.137 0.294 0.408 RG 1 w 618 258 m 618 278 l S
+0.137 0.294 0.408 RG 1 w 638 258 m 638 278 l S
+0.137 0.294 0.408 RG 1 w 658 258 m 658 278 l S
+0.137 0.294 0.408 RG 1 w 678 258 m 678 278 l S
+0.137 0.294 0.408 RG 1 w 698 258 m 698 278 l S
+0.137 0.294 0.408 RG 1 w 718 258 m 718 278 l S
+0.137 0.294 0.408 RG 1 w 738 258 m 738 278 l S
+0.137 0.294 0.408 RG 1 w 758 258 m 758 278 l S
+0.137 0.294 0.408 RG 1 w 778 258 m 778 278 l S
+0.137 0.294 0.408 RG 1 w 798 258 m 798 278 l S
+0.137 0.294 0.408 RG 1 w 818 258 m 818 278 l S
+0.137 0.294 0.408 RG 1 w 838 258 m 838 278 l S
+0.400 1.000 0.820 rg 578 298 60 28 re f
+0.400 1.000 0.820 RG 3 w 648 312 m 814 312 l S
+BT 0.918 0.980 1.000 rg /F2 15 Tf 542 214 Td (Nearly zero net force -> nearly uniform motion) Tj ET
 endstream
 endobj
 xref
@@ -112,14 +300,14 @@ xref
 0000000209 00000 n 
 0000000279 00000 n 
 0000000415 00000 n 
-0000000765 00000 n 
-0000000901 00000 n 
-0000001243 00000 n 
-0000001380 00000 n 
-0000001711 00000 n 
-0000001849 00000 n 
+0000003450 00000 n 
+0000003586 00000 n 
+0000006692 00000 n 
+0000006829 00000 n 
+0000009938 00000 n 
+0000010076 00000 n 
 trailer
 << /Size 13 /Root 1 0 R >>
 startxref
-2200
+13843
 %%EOF

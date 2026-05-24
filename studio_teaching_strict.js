@@ -1,5 +1,5 @@
-﻿const NODE_WIDTH = 208;
-const NODE_HEIGHT = 124;
+﻿const NODE_WIDTH = 260;
+const NODE_HEIGHT = 168;
 const GRID_OFFSET = 12;
 const GRID_SIZE = 24;
 const LOCAL_STATE_KEY = "phycs_teacher_workspace_v2";
@@ -636,8 +636,13 @@ function updateCanvasSize(p) {
 function center(p, moduleId, side) {
   const m = moduleById(p, moduleId);
   if (!m) return null;
-  const w = m.shape === "circle" ? 180 : NODE_WIDTH;
-  const h = m.shape === "circle" ? 180 : NODE_HEIGHT;
+  const size = {
+    circle: { w: 210, h: 210 },
+    diamond: { w: 260, h: 190 },
+    hex: { w: 260, h: 178 },
+  }[m.shape] || { w: NODE_WIDTH, h: NODE_HEIGHT };
+  const w = size.w;
+  const h = size.h;
   const x = Number(m.positionX || GRID_OFFSET);
   const y = Number(m.positionY || GRID_OFFSET);
   if (side === "left") return { x, y: y + h / 2 };
@@ -1716,8 +1721,8 @@ async function init() {
       contentType: type,
       color: dom.moduleColorSelect.value,
       shape: dom.moduleShapeSelect.value,
-      positionX: GRID_OFFSET + (idx % 5) * 240,
-      positionY: GRID_OFFSET + Math.floor(idx / 5) * 170,
+      positionX: GRID_OFFSET + (idx % 5) * 300,
+      positionY: GRID_OFFSET + Math.floor(idx / 5) * 220,
       file: null,
       compile: type === "ai_assistant"
         ? { ready: false, summary: "AI Assistant not configured", data: { type: "ai_assistant", aiConfig: emptyAiConfig() } }
